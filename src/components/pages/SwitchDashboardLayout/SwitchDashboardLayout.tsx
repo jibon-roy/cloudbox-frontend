@@ -1,39 +1,65 @@
 "use client";
+
 import { useRouter } from "next/navigation";
-import { useEffect, useState } from "react";
+import { useEffect, useMemo } from "react";
 import AdminOverview from "../dashboard/admin-dashboard/AdminOverview";
 import UserOverview from "../dashboard/user-dashboard/UserOverview";
-// import { useSelector } from "react-redux";
-// import { RootState } from "@/src/redux/store";
+import { useAppSelector } from "@/src/redux/hooks";
+import {
+  selectCurrentToken,
+  selectCurrentUser,
+} from "@/src/redux/features/auth/authSlice";
+import { decodeUserFromToken } from "@/src/lib/helpers/decodeToken";
 
 const SwitchDashboardLayout = () => {
-  //   const user = useSelector((state: RootState) => state.auth.user);
-  //   const userRole = user?.role;
   const router = useRouter();
+  const user = useAppSelector(selectCurrentUser);
+  const accessToken = useAppSelector(selectCurrentToken);
 
-  const [userRole] = useState<"ADMIN" | "USER">("ADMIN");
+  const userRole = useMemo(() => {
+    const roleFromUser =
+      user?.role ?? user?.user?.role ?? user?.data?.role ?? null;
+
+    if (roleFromUser === "ADMIN" || roleFromUser === "USER") {
+      return roleFromUser;
+    }
+
+    const decoded = decodeUserFromToken<{ role?: string; roles?: string[] }>(
+      accessToken,
+    );
+
+    const roleFromToken =
+      decoded?.role ??
+      (Array.isArray(decoded?.roles) && decoded.roles.length > 0
+        ? decoded.roles[0]
+        : null);
+
+    if (roleFromToken === "ADMIN") {
+      return "ADMIN" as const;
+    }
+
+    return "USER" as const;
+  }, [accessToken, user]);
 
   useEffect(() => {
-    if (!userRole) {
-      router.push("/auth/signin");
+    if (!accessToken) {
+      router.push("/auth/login");
     }
-  }, [router, userRole]);
+  }, [accessToken, router]);
 
-  if (userRole === "USER") {
+  if (!accessToken) {
     return (
-      <>
-        <UserOverview />
-      </>
-    );
-  } else if (userRole === "ADMIN") {
-    return (
-      <>
-        <AdminOverview />
-      </>
+      <div className="rounded-2xl border border-border-subtle bg-surface p-6 text-sm text-muted">
+        Redirecting to login...
+      </div>
     );
   }
 
-  return <></>;
+  if (userRole === "USER") {
+    return <UserOverview />;
+  }
+
+  return <AdminOverview />;
 };
 
 export default SwitchDashboardLayout;

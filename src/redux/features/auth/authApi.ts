@@ -5,7 +5,7 @@ const authApi = baseApi.injectEndpoints({
     login: builder.mutation({
       query: (userInfo) => {
         return {
-          url: "login",
+          url: "auth/login",
           method: "POST",
           body: userInfo,
         };
@@ -14,9 +14,8 @@ const authApi = baseApi.injectEndpoints({
     }),
     loginWithGoogle: builder.mutation({
       query: (userInfo) => {
-        console.log({ userInfo });
         return {
-          url: "google-login",
+          url: "auth/google-login",
           method: "POST",
           body: userInfo,
         };
@@ -25,9 +24,8 @@ const authApi = baseApi.injectEndpoints({
     }),
     forgotPassword: builder.mutation({
       query: (userInfo) => {
-        console.log({ userInfo });
         return {
-          url: "forgot-password",
+          url: "auth/forgot-password",
           method: "POST",
           body: userInfo,
         };
@@ -36,9 +34,8 @@ const authApi = baseApi.injectEndpoints({
     }),
     resetPassword: builder.mutation({
       query: (userInfo) => {
-        console.log({ userInfo });
         return {
-          url: "reset-password",
+          url: "auth/reset-password",
           method: "POST",
           body: userInfo,
         };
@@ -58,7 +55,7 @@ const authApi = baseApi.injectEndpoints({
     register: builder.mutation({
       query: (userInfo) => {
         return {
-          url: "register",
+          url: "auth/register",
           method: "POST",
           body: userInfo,
         };
@@ -67,7 +64,7 @@ const authApi = baseApi.injectEndpoints({
     otp: builder.mutation({
       query: (userInfo) => {
         return {
-          url: "users/verify-otp",
+          url: "auth/verify-otp",
           method: "POST",
           body: userInfo,
         };

@@ -8,61 +8,62 @@ export default function NotificationDetails() {
   const [isOpen, setIsOpen] = useState(false);
 
   const toggleDrawer = () => {
-    setIsOpen(!isOpen);
+    setIsOpen((prev) => !prev);
   };
 
   return (
     <div>
       <button
         type="button"
-        className="p-1.5 sm:p-2 hover:bg-gray-200 border-2 border-gray-200 cursor-pointer rounded-full transition-colors"
+        className="cursor-pointer rounded-full border border-border-subtle p-1.5 transition-colors hover:bg-surface-soft sm:p-2"
         onClick={toggleDrawer}
       >
-        <Bell className="h-4 w-4 sm:h-5 sm:w-5 text-gray-600 " />
+        <Bell className="h-4 w-4 text-muted sm:h-5 sm:w-5" />
       </button>
 
-      {/* Drawer/Sidebar */}
       <div
-        className={`fixed top-0 right-0 w-80 h-full bg-white  shadow-xl transition-transform duration-300 transform ${
+        className={`fixed right-0 top-0 z-50 h-full w-full max-w-80 transform bg-surface shadow-xl transition-transform duration-300 ${
           isOpen ? "translate-x-0" : "translate-x-full"
-        } z-100000`}
+        }`}
       >
-        <div className="flex justify-between items-center p-4 border-b border-gray-200 ">
-          <h3 className="text-lg font-semibold">Notifications</h3>
-          <button onClick={toggleDrawer} className="text-gray-600 ">
-            <X />
+        <div className="flex items-center justify-between border-b border-border-subtle p-4">
+          <h3 className="text-lg font-semibold text-app-text">Notifications</h3>
+          <button
+            type="button"
+            onClick={toggleDrawer}
+            className="rounded-full p-1 text-muted hover:bg-surface-soft"
+          >
+            <X size={18} />
           </button>
         </div>
         <div className="p-4">
-          {/* Notifications Content */}
-          <ul>
-            <li className="p-2 hover:bg-gray-100  rounded">
-              <Link href="#" className="text-gray-700 ">
-                Notification #1
-              </Link>
-            </li>
-            <li className="p-2 hover:bg-gray-100  rounded">
-              <Link href="#" className="text-gray-700 ">
-                Notification #2
-              </Link>
-            </li>
-            <li className="p-2 hover:bg-gray-100  rounded">
-              <Link href="#" className="text-gray-700 ">
-                Notification #3
-              </Link>
-            </li>
-            {/* Add more notifications here */}
+          <ul className="space-y-2">
+            {[
+              "Upload completed",
+              "New share link created",
+              "Subscription updated",
+            ].map((item) => (
+              <li
+                key={item}
+                className="rounded-xl border border-border-subtle bg-surface-soft px-3 py-2"
+              >
+                <Link href="#" className="text-sm text-app-text">
+                  {item}
+                </Link>
+              </li>
+            ))}
           </ul>
         </div>
       </div>
 
-      {/* Backdrop */}
-      <div
-        className={`fixed inset-0 bg-black bg-opacity-50 transition-opacity duration-300 ${
-          isOpen ? "opacity-50" : "opacity-0 pointer-events-none"
-        } z-99999`}
+      <button
+        type="button"
+        aria-label="notification backdrop"
+        className={`fixed inset-0 z-40 bg-black/40 transition-opacity ${
+          isOpen ? "opacity-100" : "pointer-events-none opacity-0"
+        }`}
         onClick={toggleDrawer}
-      ></div>
+      />
     </div>
   );
 }

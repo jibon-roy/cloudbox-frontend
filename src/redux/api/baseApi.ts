@@ -14,6 +14,7 @@ import { signOut } from "next-auth/react";
 /* ----------------------------------------------
  * 🔐 Base Query (Adds Access Token Automatically)
  * ---------------------------------------------- */
+
 const baseQuery = fetchBaseQuery({
   baseUrl: process.env.NEXT_PUBLIC_BASE_URL ?? "", // fallback
   credentials: "include",
@@ -21,6 +22,10 @@ const baseQuery = fetchBaseQuery({
     const access_token = (getState() as RootState)?.auth?.access_token ?? null;
 
     headers.set("accept", "application/json");
+    headers.set(
+      "X-API-Access-Token",
+      process.env.NEXT_PUBLIC_API_ACCESS_TOKEN ?? "",
+    );
 
     if (access_token) {
       headers.set("authorization", `Bearer ${access_token}`);
@@ -75,11 +80,13 @@ const baseQueryWithRefreshToken: BaseQueryFn<
 
       if (data?.success) {
         const user = state?.auth?.user ?? {};
+        const subscription = state?.auth?.subscription ?? null;
 
         // 🎯 Update Redux with new token but keep user intact
         api.dispatch(
           setUser({
             user,
+            subscription,
             access_token: data?.data?.accessToken ?? "",
             refresh_token: data?.data?.refreshToken ?? "",
           }),
@@ -122,12 +129,12 @@ const baseQueryWithRefreshToken: BaseQueryFn<
 export const baseApi = createApi({
   reducerPath: "baseApi",
   baseQuery: baseQueryWithRefreshToken,
-  tagTypes: ["user", "example", "generic"], // typed + safe
+  tagTypes: ["user", "example", "generic", "subscription"], // typed + safe
   endpoints: () => ({}),
 });
 
 export type ApiTagTypes = typeof baseApi.reducerPath extends string
   ? (typeof baseApi)["reducerPath"] extends string
-    ? "user" | "example" | "generic"
+    ? "user" | "example" | "generic" | "subscription"
     : never
   : never;

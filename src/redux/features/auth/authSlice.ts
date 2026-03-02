@@ -4,12 +4,14 @@ import { RootState } from "../../store";
 
 type TAuthState = {
   user: null | any;
+  subscription: null | any;
   access_token: null | string;
   refresh_token: null | string;
 };
 
 const initialState: TAuthState = {
   user: null,
+  subscription: null,
   access_token: null,
   refresh_token: null,
 };
@@ -19,13 +21,16 @@ const authSlice = createSlice({
   initialState,
   reducers: {
     setUser: (state, action) => {
-      const { user, access_token, refresh_token } = action.payload;
+      const { user, subscription, access_token, refresh_token } =
+        action.payload;
       state.user = user;
+      state.subscription = subscription ?? null;
       state.access_token = access_token;
       state.refresh_token = refresh_token;
     },
     logout: (state) => {
       state.user = null;
+      state.subscription = null;
       state.access_token = null;
       state.refresh_token = null;
     },
@@ -38,3 +43,5 @@ export default authSlice.reducer;
 
 export const selectCurrentToken = (state: RootState) => state.auth.access_token;
 export const selectCurrentUser = (state: RootState) => state.auth.user;
+export const selectCurrentSubscription = (state: RootState) =>
+  state.auth.subscription;

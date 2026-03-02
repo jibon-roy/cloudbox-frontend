@@ -1,38 +1,39 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 "use client";
 
-import { BarChart2, Building2, Folder, LogOut, Menu } from "lucide-react";
-
-import { Home } from "lucide-react";
+import { BarChart2, Building2, Folder, Home, LogOut, Menu } from "lucide-react";
 import Link from "next/link";
 import { useState } from "react";
-// import Image from "next/image";
 import { logoutHandler } from "@/src/utils/handleLogout";
 import { useRouter, usePathname } from "next/navigation";
 import { useDispatch } from "react-redux";
-import { FcCdLogo } from "react-icons/fc";
+import Logo from "../../ui-library/logo";
 
 function NavItem({
   href = "#",
   icon: Icon,
   children,
+  onClick,
 }: {
   href?: string;
   icon?: React.ComponentType<any>;
   children: React.ReactNode;
+  onClick?: () => void;
 }) {
   const pathname = usePathname();
+  const isActive = pathname === href;
 
-  // Function to check if a menu item is active
-  const isActive = (href: string) => pathname === href;
   return (
     <Link
       href={href}
-      className={`flex items-center px-3 py-2 text-sm md:text-base rounded-md transition-colors 
-        ${isActive(href) ? "bg-[#0EA5E9]" : "text-[#B5B7BD]"} 
-        hover:text-gray-100 hover:bg-gray-600`}
+      onClick={onClick}
+      className={`flex items-center rounded-xl px-3 py-2 text-sm transition-colors lg:text-base ${
+        isActive
+          ? "bg-primary text-text-inverse"
+          : "text-muted hover:bg-surface-soft hover:text-app-text"
+      }`}
     >
-      {Icon && <Icon className="h-5 w-5 mr-3 shrink-0" />}
+      {Icon && <Icon className="mr-3 h-5 w-5 shrink-0" />}
       {children}
     </Link>
   );
@@ -43,85 +44,77 @@ export default function Sidebar() {
 
   const router = useRouter();
   const dispatch = useDispatch();
+
   const handleLogout = () => {
     logoutHandler(dispatch, router);
     window.dispatchEvent(new Event("logout"));
   };
 
+  const closeMobile = () => setIsMobileMenuOpen(false);
+
   return (
     <>
       <button
         type="button"
-        className="lg:hidden fixed top-4 left-4 z-70 p-2 rounded-lg bg-white shadow-lg border border-gray-200 cursor-pointer"
-        onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
+        className="fixed left-3 top-3 z-40 cursor-pointer rounded-lg border border-border-subtle bg-surface p-2 lg:hidden"
+        onClick={() => setIsMobileMenuOpen((prev) => !prev)}
       >
-        <Menu className="h-5 w-5 text-gray-600" />
+        <Menu className="h-5 w-5 text-app-text" />
       </button>
-      <nav
-        className={`fixed inset-y-0 left-0 z-70 w-64 bg-[#0F172A] transform transition-transform duration-200 ease-in-out
-                lg:translate-x-0 lg:static lg:w-64 border-r border-gray-200
-                ${isMobileMenuOpen ? "translate-x-0" : "-translate-x-full"}`}
-      >
-        <div className="h-full flex flex-col">
-          <Link
-            href="/"
-            target="_blank"
-            rel="noopener noreferrer"
-            className="h-16 px-6 flex items-center border-b-2 border-dashed border-gray-300"
-          >
-            <div className="flex items-center gap-3">
-              {/* <Image
-                src=""
-                alt="Logo"
-                width={32}
-                height={32}
-                className="flex-shrink-0 hidden dark:block"
-              /> */}
-              <FcCdLogo size={150} className="h-20 w-auto mr-3" />
-            </div>
-          </Link>
 
-          <div className="flex-1 overflow-y-auto py-4 px-4">
-            <div className="space-y-6">
-              <div>
-                <div className="space-y-1">
-                  <NavItem href="/dashboard" icon={Home}>
-                    Dashboard
-                  </NavItem>
-                  <NavItem href="/demo" icon={BarChart2}>
-                    Demo
-                  </NavItem>
-                  <NavItem href="/organization" icon={Building2}>
-                    Demo 2
-                  </NavItem>
-                  <NavItem href="/projects" icon={Folder}>
-                    Demo 3
-                  </NavItem>
-                </div>
-              </div>
+      <nav
+        className={`fixed inset-y-0 left-0 z-50 h-screen max-h-screen w-70 transform overflow-y-auto border-r border-border-subtle bg-surface transition-transform duration-200 ease-in-out lg:static lg:translate-x-0 ${
+          isMobileMenuOpen ? "translate-x-0" : "-translate-x-full"
+        }`}
+      >
+        <div className="flex h-full flex-col">
+          <div
+            onClick={closeMobile}
+            className="flex h-16 items-center border-b border-border-subtle px-5"
+          >
+            <Logo />
+          </div>
+
+          <div className="flex-1 p-4">
+            <div className="space-y-1">
+              <NavItem href="/dashboard" icon={Home} onClick={closeMobile}>
+                Dashboard
+              </NavItem>
+              <NavItem href="/demo" icon={BarChart2} onClick={closeMobile}>
+                Demo
+              </NavItem>
+              <NavItem
+                href="/organization"
+                icon={Building2}
+                onClick={closeMobile}
+              >
+                Demo 2
+              </NavItem>
+              <NavItem href="/projects" icon={Folder} onClick={closeMobile}>
+                Demo 3
+              </NavItem>
             </div>
           </div>
 
-          <div className="px-4 py-4">
-            <div className="space-y-1">
-              <NavItem>
-                <button
-                  onClick={handleLogout}
-                  className="w-full flex items-center"
-                >
-                  <LogOut size={35} className="h-5 w-5 mr-3" />
-                  <span className="text-sm md:text-base">Logout</span>
-                </button>
-              </NavItem>
-            </div>
+          <div className="border-t border-border-subtle p-4">
+            <button
+              type="button"
+              onClick={handleLogout}
+              className="flex w-full items-center rounded-xl px-3 py-2 text-sm text-muted transition-colors hover:bg-surface-soft hover:text-app-text lg:text-base"
+            >
+              <LogOut className="mr-3 h-5 w-5" />
+              <span>Logout</span>
+            </button>
           </div>
         </div>
       </nav>
 
       {isMobileMenuOpen && (
-        <div
-          className="fixed inset-0 bg-black/30 z-65 lg:hidden"
-          onClick={() => setIsMobileMenuOpen(false)}
+        <button
+          type="button"
+          aria-label="close menu backdrop"
+          className="fixed inset-0 z-40 bg-black/35 lg:hidden"
+          onClick={closeMobile}
         />
       )}
     </>

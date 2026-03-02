@@ -39,8 +39,7 @@ const storage =
 const persistAuthConfig = {
   key: "auth",
   storage,
-  // Persist tokens only; do not persist user profile to avoid exposing user data in storage
-  whitelist: ["access_token", "refresh_token"],
+  whitelist: ["user", "subscription", "access_token", "refresh_token"],
 };
 
 const persistedAuthReducer = persistReducer(persistAuthConfig, authReducer);
