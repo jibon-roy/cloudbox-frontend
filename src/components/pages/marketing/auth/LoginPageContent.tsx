@@ -11,6 +11,7 @@ import MarketingInput from "../MarketingInput";
 import ForgotPasswordModal from "./modals/ForgotPasswordModal";
 import { useLoginMutation } from "@/src/redux/features/auth/authApi";
 import { setUser } from "@/src/redux/features/auth/authSlice";
+import { colors } from "@/src/lib/colors";
 
 const LoginPageContent = () => {
   const router = useRouter();
@@ -63,6 +64,7 @@ const LoginPageContent = () => {
         icon: "error",
         title: "Login Failed",
         text: err?.data?.message || "Invalid email or password",
+         confirmButtonColor: colors.primary
       });
     }
   };

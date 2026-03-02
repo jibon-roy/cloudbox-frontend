@@ -14,6 +14,7 @@ import {
   useOtpMutation,
 } from "@/src/redux/features/auth/authApi";
 import { setUser } from "@/src/redux/features/auth/authSlice";
+import { colors } from "@/src/lib/colors";
 
 const SignupPageContent = () => {
   const router = useRouter();
@@ -89,6 +90,7 @@ const SignupPageContent = () => {
         icon: "error",
         title: "Registration Failed",
         text: err?.data?.message || "This email might already be registered",
+       confirmButtonColor: colors.primary
       });
     }
   };
@@ -123,6 +125,7 @@ const SignupPageContent = () => {
         icon: "error",
         title: "Verification Failed",
         text: err?.data?.message || "Invalid or expired OTP",
+         confirmButtonColor: colors.primary
       });
     }
   };

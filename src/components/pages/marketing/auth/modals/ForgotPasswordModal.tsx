@@ -8,6 +8,7 @@ import MarketingInput from "../../MarketingInput";
 import { useForgotPasswordMutation } from "@/src/redux/features/auth/authApi";
 import OTPVerifyModal from "./OTPVerifyModal";
 import ResetPasswordModal from "./ResetPasswordModal";
+import { colors } from "@/src/lib/colors";
 
 interface ForgotPasswordModalProps {
   isOpen: boolean;
@@ -58,6 +59,7 @@ const ForgotPasswordModal = ({ isOpen, onClose }: ForgotPasswordModalProps) => {
         icon: "error",
         title: "Error",
         text: err?.data?.message || "Failed to send OTP",
+        confirmButtonColor: colors.primary
       });
     }
   };

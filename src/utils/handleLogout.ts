@@ -2,6 +2,7 @@
 import Swal from "sweetalert2";
 import { Dispatch } from "redux";
 import { logout } from "@/src/redux/features/auth/authSlice";
+import { colors } from "../lib/colors";
 
 export const logoutHandler = async (dispatch: Dispatch, router: any) => {
   try {
@@ -9,7 +10,7 @@ export const logoutHandler = async (dispatch: Dispatch, router: any) => {
       title: "Are you sure?",
       icon: "warning",
       showCancelButton: true,
-      confirmButtonColor: "#3085d6",
+      confirmButtonColor: colors.primary,
       cancelButtonColor: "#d33",
       confirmButtonText: "Yes, Log out!",
     });
@@ -33,6 +34,7 @@ export const logoutHandler = async (dispatch: Dispatch, router: any) => {
         (error as any)?.data?.success === false &&
         (error as any)?.data?.errorSources[0]?.message,
       showConfirmButton: true,
+      confirmButtonColor: colors.primary,
     });
   }
 };

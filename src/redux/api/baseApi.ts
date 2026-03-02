@@ -10,6 +10,7 @@ import { RootState } from "../store";
 import { logout, setUser } from "../features/auth/authSlice";
 import Swal from "sweetalert2";
 import { signOut } from "next-auth/react";
+import { colors } from "@/src/lib/colors";
 
 /* ----------------------------------------------
  * 🔐 Base Query (Adds Access Token Automatically)
@@ -58,6 +59,7 @@ const baseQueryWithRefreshToken: BaseQueryFn<
           icon: "error",
           title: "Session Expired",
           text: "Please login again to continue",
+           confirmButtonColor: colors.primary
         });
         signOut();
         return result;
@@ -102,6 +104,7 @@ const baseQueryWithRefreshToken: BaseQueryFn<
           text: "Please login again to continue",
           showConfirmButton: false,
           showCancelButton: true,
+           confirmButtonColor: colors.primary,
           cancelButtonText: "Stay Logged Out",
         }).then((response) => {
           if (response.isConfirmed || response.isDismissed) {
@@ -129,12 +132,27 @@ const baseQueryWithRefreshToken: BaseQueryFn<
 export const baseApi = createApi({
   reducerPath: "baseApi",
   baseQuery: baseQueryWithRefreshToken,
-  tagTypes: ["user", "example", "generic", "subscription", "fileSystem"], // typed + safe
+  tagTypes: [
+    "user",
+    "example",
+    "generic",
+    "subscription",
+    "fileSystem",
+    "files",
+    "folders",
+  ], // typed + safe
   endpoints: () => ({}),
 });
 
 export type ApiTagTypes = typeof baseApi.reducerPath extends string
   ? (typeof baseApi)["reducerPath"] extends string
-    ? "user" | "example" | "generic" | "subscription" | "fileSystem"
+    ?
+        | "user"
+        | "example"
+        | "generic"
+        | "subscription"
+        | "fileSystem"
+        | "files"
+        | "folders"
     : never
   : never;

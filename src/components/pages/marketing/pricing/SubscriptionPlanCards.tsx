@@ -13,6 +13,7 @@ import {
   selectCurrentUser,
 } from "@/src/redux/features/auth/authSlice";
 import { useBuySubscriptionMutation } from "@/src/redux/features/subscription/subscriptionApi";
+import { colors } from "@/src/lib/colors";
 
 export type PricingPlanCardItem = {
   id: string;
@@ -121,12 +122,14 @@ const SubscriptionPlanCards = ({
         icon: "error",
         title: "Checkout Error",
         text: "Could not get checkout URL. Please try again.",
+         confirmButtonColor: colors.primary
       });
     } catch (error: any) {
       Swal.fire({
         icon: "error",
         title: "Subscription Failed",
         text: error?.data?.message || "Unable to create checkout session",
+         confirmButtonColor: colors.primary
       });
     } finally {
       setProcessingPlanId(null);

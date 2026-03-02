@@ -63,7 +63,7 @@ const ThemeSwitch = ({
         aria-label={isDark ? "Switch to light theme" : "Switch to dark theme"}
         onClick={handleToggle}
         className={`
-      relative inline-flex outline-none items-center h-8 w-14 rounded-full
+      relative inline-flex outline-none items-center h-6 w-12 rounded-full
       transition-all duration-500 ease-in-out
       shadow-inner bg-linear-to-r
       ${
@@ -77,24 +77,24 @@ const ThemeSwitch = ({
         <span className="sr-only">Toggle theme</span>
         <span
           className={`
-        inline-flex h-6 w-6 items-center justify-center rounded-full shadow-md
+        inline-flex h-5 w-5 items-center justify-center rounded-full shadow-md
         transform transition-all duration-500 ease-in-out
         ${
           isDark
-            ? "translate-x-7 rotate-360 bg-gray-900"
+            ? "translate-x-6 rotate-360 bg-gray-900"
             : "translate-x-1 rotate-0 bg-white"
         }
       `}
         >
           {isDark ? (
             <Moon
-              className={`w-5 h-5 text-yellow-400 fill-yellow-400 stroke-0 transition-transform duration-500 ease-in-out ${
+              className={`w-4 h-4 text-yellow-400 fill-yellow-400 stroke-0 transition-transform duration-500 ease-in-out ${
                 spinning ? "animate-[spin_1s_ease-in-out]" : ""
               }`}
             />
           ) : (
             <SunIcon
-              className={`w-5 h-5 text-yellow-500 fill-yellow-500 transition-transform duration-500 ease-in-out ${
+              className={`w-4 h-4 text-yellow-500 fill-yellow-500 transition-transform duration-500 ease-in-out ${
                 spinning ? "animate-[spin_1s_ease-in-out]" : ""
               }`}
             />

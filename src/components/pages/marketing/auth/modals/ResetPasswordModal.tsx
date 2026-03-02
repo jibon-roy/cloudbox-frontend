@@ -7,6 +7,7 @@ import Swal from "sweetalert2";
 import MarketingButton from "../../MarketingButton";
 import MarketingInput from "../../MarketingInput";
 import { useResetPasswordMutation } from "@/src/redux/features/auth/authApi";
+import { colors } from "@/src/lib/colors";
 
 interface ResetPasswordModalProps {
   isOpen: boolean;
@@ -90,6 +91,7 @@ const ResetPasswordModal = ({
         icon: "error",
         title: "Reset Failed",
         text: err?.data?.message || "Invalid OTP or password reset failed",
+         confirmButtonColor: colors.primary
       });
     }
   };
