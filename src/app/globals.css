@@ -10,27 +10,178 @@
 
 /* Theme variables (light default) */
 :root {
-  --background: #ffffff;
-  --foreground: #171717;
+  --background: #f6f8fc;
+  --foreground: #12213f;
+  --surface: #ffffff;
+  --surface-soft: #edf3ff;
+  --surface-strong: #dce8ff;
+  --border-subtle: #cfdcf6;
+  --ring: #8eb6ff;
+  --primary: #1a73e8;
+  --primary-strong: #155ec5;
+  --secondary: #0061ff;
+  --secondary-strong: #034ad6;
+  --accent: #14a38b;
+  --accent-strong: #0f7f6c;
+  --success: #16a34a;
+  --success-strong: #15803d;
+  --info: #0ea5e9;
+  --info-strong: #0284c7;
+  --purple: #9333ea;
+  --purple-strong: #7e22ce;
+  --orange: #ea580c;
+  --orange-strong: #c2410c;
+  --warning: #c98613;
+  --danger: #c6404b;
+  --muted: #5e6d8b;
+  --text-inverse: #f3f7ff;
 }
 
 @theme {
   --color-foreground: var(--foreground);
   --color-background: var(--background);
+  --color-app-bg: var(--background);
+  --color-app-text: var(--foreground);
+  --color-surface: var(--surface);
+  --color-surface-soft: var(--surface-soft);
+  --color-surface-strong: var(--surface-strong);
+  --color-border-subtle: var(--border-subtle);
+  --color-ring-brand: var(--ring);
+  --color-primary: var(--primary);
+  --color-primary-strong: var(--primary-strong);
+  --color-secondary: var(--secondary);
+  --color-secondary-strong: var(--secondary-strong);
+  --color-accent: var(--accent);
+  --color-accent-strong: var(--accent-strong);
+  --color-success: var(--success);
+  --color-success-strong: var(--success-strong);
+  --color-info: var(--info);
+  --color-info-strong: var(--info-strong);
+  --color-purple: var(--purple);
+  --color-purple-strong: var(--purple-strong);
+  --color-orange: var(--orange);
+  --color-orange-strong: var(--orange-strong);
+  --color-warning: var(--warning);
+  --color-danger: var(--danger);
+  --color-muted: var(--muted);
+  --color-text-inverse: var(--text-inverse);
 }
 
 /* Class- or attribute-driven dark mode (overrides variables) */
 html.dark,
 [data-theme="dark"],
 [data-mode="dark"] {
-  --background: #0a0a0a;
-  --foreground: #ededed;
+  --background: #0b1222;
+  --foreground: #dce8ff;
+  --surface: #111c33;
+  --surface-soft: #162540;
+  --surface-strong: #1c3052;
+  --border-subtle: #2c446d;
+  --ring: #5d8fe6;
+  --primary: #4d93ff;
+  --primary-strong: #78acff;
+  --secondary: #5f8dff;
+  --secondary-strong: #84a8ff;
+  --accent: #2ec4ab;
+  --accent-strong: #4ad9c0;
+  --success: #22c55e;
+  --success-strong: #4ade80;
+  --info: #38bdf8;
+  --info-strong: #7dd3fc;
+  --purple: #a855f7;
+  --purple-strong: #c084fc;
+  --orange: #fb923c;
+  --orange-strong: #fdba74;
+  --warning: #ffb347;
+  --danger: #ff7580;
+  --muted: #8ea4ca;
+  --text-inverse: #0c1426;
 }
-
 
 body {
   background: var(--background);
   color: var(--foreground);
   font-family: Arial, Helvetica, sans-serif;
-  transition: background-color 160ms ease, color 160ms ease;
+  transition:
+    background-color 160ms ease,
+    color 160ms ease;
+}
+
+@layer components {
+  .brand-glass {
+    background: color-mix(in srgb, var(--surface) 82%, transparent);
+    border: 1px solid color-mix(in srgb, var(--border-subtle) 78%, transparent);
+    backdrop-filter: blur(10px);
+  }
+
+  .brand-gradient {
+    background-image: linear-gradient(
+      130deg,
+      color-mix(in srgb, var(--primary) 28%, transparent),
+      color-mix(in srgb, var(--secondary) 25%, transparent),
+      color-mix(in srgb, var(--accent) 22%, transparent)
+    );
+  }
+
+  .brand-grid {
+    background-image:
+      linear-gradient(
+        color-mix(in srgb, var(--border-subtle) 42%, transparent) 1px,
+        transparent 1px
+      ),
+      linear-gradient(
+        90deg,
+        color-mix(in srgb, var(--border-subtle) 42%, transparent) 1px,
+        transparent 1px
+      );
+    background-size: 22px 22px;
+  }
+
+  .section-bg-primary {
+    background: linear-gradient(
+      135deg,
+      color-mix(in srgb, var(--primary) 8%, var(--surface)),
+      color-mix(in srgb, var(--info) 6%, var(--surface))
+    );
+  }
+
+  .section-bg-success {
+    background: linear-gradient(
+      135deg,
+      color-mix(in srgb, var(--success) 8%, var(--surface)),
+      color-mix(in srgb, var(--accent) 6%, var(--surface))
+    );
+  }
+
+  .section-bg-purple {
+    background: linear-gradient(
+      135deg,
+      color-mix(in srgb, var(--purple) 8%, var(--surface)),
+      color-mix(in srgb, var(--secondary) 6%, var(--surface))
+    );
+  }
+
+  .section-bg-orange {
+    background: linear-gradient(
+      135deg,
+      color-mix(in srgb, var(--orange) 8%, var(--surface)),
+      color-mix(in srgb, var(--warning) 6%, var(--surface))
+    );
+  }
+
+  .section-bg-info {
+    background: linear-gradient(
+      135deg,
+      color-mix(in srgb, var(--info) 8%, var(--surface)),
+      color-mix(in srgb, var(--accent) 6%, var(--surface))
+    );
+  }
+
+  .section-bg-accent {
+    background: linear-gradient(
+      135deg,
+      color-mix(in srgb, var(--accent) 8%, var(--surface)),
+      color-mix(in srgb, var(--success) 6%, var(--surface))
+    );
+  }
 }

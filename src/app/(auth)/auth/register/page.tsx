@@ -1,7 +1,12 @@
-import React from "react";
+import MarketingPageLayout from "@/src/components/pages/marketing/MarketingPageLayout";
+import SignupPageContent from "@/src/components/pages/marketing/auth/SignupPageContent";
 
 const RegisterPage = () => {
-  return <div>Register Page</div>;
+  return (
+    <MarketingPageLayout>
+      <SignupPageContent />
+    </MarketingPageLayout>
+  );
 };
 
 export default RegisterPage;

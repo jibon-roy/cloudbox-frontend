@@ -163,8 +163,12 @@ export default function RootLayout({
     <html suppressHydrationWarning lang="en">
       <body className={`antialiased`}>
         <ReduxStoreProvider>
-          <ThemeProvider attribute="class" defaultTheme="system" enableSystem>
-            <div className="bg-white dark:bg-black">{children}</div>
+          <ThemeProvider
+            attribute="class"
+            defaultTheme="light"
+            enableSystem={false}
+          >
+            <div className="bg-app-bg">{children}</div>
             <Toaster />
           </ThemeProvider>
         </ReduxStoreProvider>

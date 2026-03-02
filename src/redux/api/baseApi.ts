@@ -60,7 +60,7 @@ const baseQueryWithRefreshToken: BaseQueryFn<
 
       // 🌐 Try refreshing token
       const res = await fetch(
-        `${process.env.NEXT_PUBLIC_BASE_URL ?? ""}refresh-token`,
+        `${process.env.NEXT_PUBLIC_BASE_URL ?? ""}/auth/refresh-token`,
         {
           method: "POST",
           credentials: "include",
@@ -68,7 +68,7 @@ const baseQueryWithRefreshToken: BaseQueryFn<
             "Content-Type": "application/json",
             authorization: `Bearer ${refreshToken}`,
           },
-        }
+        },
       );
 
       const data = await res.json().catch(() => null);
@@ -80,9 +80,9 @@ const baseQueryWithRefreshToken: BaseQueryFn<
         api.dispatch(
           setUser({
             user,
-            access_token: data?.data?.token ?? "",
-            refresh_token: refreshToken,
-          })
+            access_token: data?.data?.accessToken ?? "",
+            refresh_token: data?.data?.refreshToken ?? "",
+          }),
         );
 
         // 🔁 Retry original request with fresh token

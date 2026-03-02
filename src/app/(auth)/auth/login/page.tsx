@@ -1,7 +1,12 @@
-import React from "react";
+import LoginPageContent from "@/src/components/pages/marketing/auth/LoginPageContent";
+import MarketingPageLayout from "@/src/components/pages/marketing/MarketingPageLayout";
 
 const LoginPage = () => {
-  return <div>Login Page</div>;
+  return (
+    <MarketingPageLayout>
+      <LoginPageContent />
+    </MarketingPageLayout>
+  );
 };
 
 export default LoginPage;
