@@ -7,6 +7,7 @@ import { AnimatePresence, motion } from "framer-motion";
 import { useState } from "react";
 import MarketingButton from "./MarketingButton";
 import dynamic from "next/dynamic";
+import Logo from "../../ui-library/logo";
 
 const ThemeSwitch = dynamic(() => import("../../ui/theme/ThemeSwitch"), {
   ssr: false,
@@ -26,13 +27,7 @@ const MarketingNavbar = () => {
   return (
     <header className="sticky top-0 z-50 border-b border-border-subtle bg-surface/90 backdrop-blur-lg">
       <nav className="mx-auto flex w-full max-w-7xl items-center justify-between px-5 py-3 lg:px-10">
-        <Link href="/" className="flex items-center gap-2">
-          <div className="h-9 w-9 rounded-xl brand-gradient" />
-          <div>
-            <p className="text-base font-bold text-app-text">CloudBox</p>
-            <p className="text-[11px] text-muted">Secure file workspace</p>
-          </div>
-        </Link>
+        <Logo />
 
         <div className="hidden items-center gap-1 rounded-full border border-border-subtle bg-surface-soft p-1 md:flex">
           {navItems.map((item) => {

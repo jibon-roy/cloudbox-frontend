@@ -2,6 +2,7 @@
 
 import { motion } from "framer-motion";
 import Link from "next/link";
+import { useEffect, useRef, useState } from "react";
 import MarketingButton from "../MarketingButton";
 
 const fadeUp = {
@@ -22,6 +23,97 @@ const packages = [
     depth: "20 Levels",
   },
 ];
+
+type AnimatedStatProps = {
+  value: number;
+  label: string;
+  note: string;
+  suffix?: string;
+  decimals?: number;
+  prefix?: string;
+  borderClass: string;
+};
+
+const AnimatedStat = ({
+  value,
+  label,
+  note,
+  suffix = "",
+  decimals = 0,
+  prefix = "",
+  borderClass,
+}: AnimatedStatProps) => {
+  const [display, setDisplay] = useState(0);
+  const [started, setStarted] = useState(false);
+  const containerRef = useRef<HTMLDivElement | null>(null);
+
+  useEffect(() => {
+    const element = containerRef.current;
+
+    if (!element || started) {
+      return;
+    }
+
+    const observer = new IntersectionObserver(
+      (entries) => {
+        entries.forEach((entry) => {
+          if (entry.isIntersecting) {
+            setStarted(true);
+            observer.disconnect();
+          }
+        });
+      },
+      { threshold: 0.35 },
+    );
+
+    observer.observe(element);
+
+    return () => observer.disconnect();
+  }, [started]);
+
+  useEffect(() => {
+    if (!started) {
+      return;
+    }
+
+    const duration = 1500;
+    const startedAt = performance.now();
+    let frameId = 0;
+
+    const tick = (currentTime: number) => {
+      const progress = Math.min((currentTime - startedAt) / duration, 1);
+      setDisplay(value * progress);
+
+      if (progress < 1) {
+        frameId = window.requestAnimationFrame(tick);
+      }
+    };
+
+    frameId = window.requestAnimationFrame(tick);
+
+    return () => window.cancelAnimationFrame(frameId);
+  }, [started, value]);
+
+  return (
+    <motion.div
+      ref={containerRef}
+      whileHover={{ y: -6, scale: 1.02 }}
+      transition={{ duration: 0.25 }}
+      className={`rounded-2xl border border-border-subtle bg-surface p-6 ${borderClass}`}
+    >
+      <p className="text-3xl font-extrabold text-app-text lg:text-4xl">
+        {prefix}
+        {display.toLocaleString("en-US", {
+          minimumFractionDigits: decimals,
+          maximumFractionDigits: decimals,
+        })}
+        {suffix}
+      </p>
+      <p className="mt-3 text-base font-semibold text-app-text">{label}</p>
+      <p className="mt-2 text-sm leading-6 text-muted">{note}</p>
+    </motion.div>
+  );
+};
 
 const HomePageContent = () => {
   return (
@@ -79,6 +171,62 @@ const HomePageContent = () => {
               </p>
             </div>
           </motion.div>
+        </div>
+      </motion.section>
+
+      <motion.section
+        {...fadeUp}
+        className="section-bg-info rounded-3xl border border-border-subtle p-10 lg:p-12"
+      >
+        <div className="mb-8 text-center">
+          <p className="text-sm font-semibold text-info">LIVE PLATFORM STATS</p>
+          <h2 className="mt-3 text-4xl font-bold lg:text-5xl">
+            Trusted Metrics
+            <br />
+            Across CloudBox Workspaces
+          </h2>
+          <p className="mx-auto mt-4 max-w-3xl text-base leading-7 text-muted">
+            As this section enters your screen, each number animates to show
+            current platform scale and usage performance in real time.
+          </p>
+        </div>
+
+        <div className="grid gap-5 sm:grid-cols-2 lg:grid-cols-5">
+          <AnimatedStat
+            value={128000}
+            label="Active Users"
+            note="Monthly users collaborating on personal and team workspaces."
+            borderClass="border-l-4 border-l-primary"
+          />
+          <AnimatedStat
+            value={12.8}
+            decimals={1}
+            suffix=" TB"
+            label="Total Uploaded"
+            note="Total storage uploaded and managed through policy-controlled flows."
+            borderClass="border-l-4 border-l-accent"
+          />
+          <AnimatedStat
+            value={9450}
+            label="Files Managed"
+            suffix="M"
+            note="Files validated, organized, and versioned with package rules."
+            borderClass="border-l-4 border-l-info"
+          />
+          <AnimatedStat
+            value={38200}
+            label="Workspaces"
+            note="Business and personal workspaces currently active across regions."
+            borderClass="border-l-4 border-l-purple"
+          />
+          <AnimatedStat
+            value={99.98}
+            decimals={2}
+            suffix="%"
+            label="Platform Uptime"
+            note="Reliable availability for uploads, folders, and access control actions."
+            borderClass="border-l-4 border-l-success"
+          />
         </div>
       </motion.section>
 
