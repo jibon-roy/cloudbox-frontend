@@ -15,6 +15,8 @@ import {
 } from "@/src/redux/features/auth/authSlice";
 import { useState } from "react";
 import { X } from "lucide-react";
+import { Button } from "@/src/components/ui/button/Button";
+import { useGetMyRecentFileSystemQuery } from "@/src/redux/features/file-system/fileSystemApi";
 
 const baseCardClass =
   "rounded-2xl border border-border-subtle bg-surface p-5 lg:p-6";
@@ -121,6 +123,12 @@ const UserOverview = () => {
   );
   const filesCount = numberValue(storage.total_files, files.length);
   const foldersCount = numberValue(storage.total_folders, folders.length);
+
+  const {data: recentFiles } = useGetMyRecentFileSystemQuery(undefined, {
+    skip,
+  });
+
+  console.log(recentFiles)
 
   const usedPercent =
     numberValue(storageSubscription.used_percentage, -1) >= 0
@@ -266,9 +274,20 @@ const UserOverview = () => {
         </div>
       </div>
 
-      <div className="grid grid-cols-1 gap-4 xl:grid-cols-2">
+      <div>
         <div className={baseCardClass}>
-          <h2 className="text-lg font-semibold text-app-text">Recent Files</h2>
+          <div className="flex gap-4 flex-wrap">
+            <h2 className="text-lg font-semibold text-app-text">
+              Recent Files and Folders
+            </h2>
+            {/* SEE ALL */}
+            <Link
+              href="/my-files"
+  
+            >
+              <Button size="sm">See All</Button>
+            </Link>
+          </div>
           <div className="mt-4 space-y-3">
             {files.length === 0 ? (
               <p className="text-sm text-muted">
@@ -292,33 +311,6 @@ const UserOverview = () => {
                       {fileName}
                     </p>
                     <p className="text-xs text-muted">{fileType}</p>
-                  </div>
-                );
-              })
-            )}
-          </div>
-        </div>
-
-        <div className={baseCardClass}>
-          <h2 className="text-lg font-semibold text-app-text">
-            Recent Folders
-          </h2>
-          <div className="mt-4 space-y-3">
-            {folders.length === 0 ? (
-              <p className="text-sm text-muted">
-                {isLoading ? "Loading folders..." : "No folders found."}
-              </p>
-            ) : (
-              folders.map((item, index) => {
-                const folderName = String(item.name ?? `Folder ${index + 1}`);
-                return (
-                  <div
-                    key={`${folderName}-${index}`}
-                    className="rounded-xl border border-border-subtle bg-surface-soft px-3 py-2"
-                  >
-                    <p className="truncate text-sm font-medium text-app-text">
-                      {folderName}
-                    </p>
                   </div>
                 );
               })

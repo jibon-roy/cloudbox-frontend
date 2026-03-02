@@ -10,6 +10,8 @@ import {
   LogOut,
   Menu,
   Package,
+  Settings,
+  User,
 } from "lucide-react";
 import Link from "next/link";
 import { useState } from "react";
@@ -89,6 +91,14 @@ export default function Sidebar() {
               <NavItem href="/dashboard" icon={Home} onClick={closeMobile}>
                 Dashboard
               </NavItem>
+              {/* file manager */}
+              <NavItem
+                href="/dashboard/file-manager"
+                icon={Folder}
+                onClick={closeMobile}
+              >
+                File Manager
+              </NavItem>
               <NavItem
                 href="/dashboard/my-subscription"
                 icon={Package}
@@ -103,18 +113,12 @@ export default function Sidebar() {
               >
                 Billing History
               </NavItem>
-              <NavItem href="/demo" icon={BarChart2} onClick={closeMobile}>
-                Demo
-              </NavItem>
               <NavItem
-                href="/organization"
-                icon={Building2}
+                href="/dashboard/user-settings"
+                icon={Settings}
                 onClick={closeMobile}
               >
-                Demo 2
-              </NavItem>
-              <NavItem href="/projects" icon={Folder} onClick={closeMobile}>
-                Demo 3
+                Settings
               </NavItem>
             </div>
           </div>

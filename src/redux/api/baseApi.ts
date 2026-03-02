@@ -129,12 +129,12 @@ const baseQueryWithRefreshToken: BaseQueryFn<
 export const baseApi = createApi({
   reducerPath: "baseApi",
   baseQuery: baseQueryWithRefreshToken,
-  tagTypes: ["user", "example", "generic", "subscription"], // typed + safe
+  tagTypes: ["user", "example", "generic", "subscription", "fileSystem"], // typed + safe
   endpoints: () => ({}),
 });
 
 export type ApiTagTypes = typeof baseApi.reducerPath extends string
   ? (typeof baseApi)["reducerPath"] extends string
-    ? "user" | "example" | "generic" | "subscription"
+    ? "user" | "example" | "generic" | "subscription" | "fileSystem"
     : never
   : never;
