@@ -3,6 +3,7 @@
 import { motion } from "framer-motion";
 import Link from "next/link";
 import MarketingButton from "../MarketingButton";
+import SubscriptionPlanCards from "./SubscriptionPlanCards";
 import { useGetAllSubscriptionQuery } from "@/src/redux/features/subscription/subscriptionApi";
 import { useSelector } from "react-redux";
 import { RootState } from "@/src/redux/store";
@@ -57,13 +58,6 @@ const PricingPageContent = () => {
   };
 
   const packages = transformedPackages(data?.data || []);
-
-  const planColors = [
-    { border: "border-accent", text: "text-accent" },
-    { border: "border-info", text: "text-info" },
-    { border: "border-primary", text: "text-primary" },
-    { border: "border-purple", text: "text-purple" },
-  ];
 
   if (isLoading) {
     return (
@@ -168,61 +162,7 @@ const PricingPageContent = () => {
         </p>
       </motion.section>
 
-      <section className="grid my-20 gap-6 md:grid-cols-2 lg:grid-cols-4">
-        {packages.map((plan, index) => {
-          const colorSet = planColors[index % planColors.length];
-          const isPopular = index === 1;
-
-          return (
-            <motion.article
-              key={plan.id}
-              initial={{ opacity: 0, y: 18 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true, amount: 0.2 }}
-              whileHover={{ y: -8, scale: 1.03 }}
-              className={`rounded-2xl border-2 p-8 cursor-pointer transition-all ${
-                isPopular
-                  ? `${colorSet.border} bg-surface-soft border-x-2 border-y-8  lg:-my-8 ring-${colorSet.border.split("-")[1]}`
-                  : `${colorSet.border} bg-surface`
-              }`}
-            >
-              {isPopular && (
-                <div className="mb-3 inline-block py-3 rounded-full bg-primary px-3 text-xs font-semibold text-text-inverse">
-                  Most Popular
-                </div>
-              )}
-              <h2 className="text-2xl font-bold text-app-text">{plan.name}</h2>
-              <p className="mt-3 text-base text-muted">{plan.desc}</p>
-              <p className={`mt-5 text-3xl font-bold ${colorSet.text}`}>
-                {plan.displayPrice}
-                {plan.price !== "Free" && (
-                  <span className="text-sm font-normal text-muted">/mo</span>
-                )}
-              </p>
-              <ul className="mt-6 space-y-3 text-base text-app-text">
-                {plan.features.map((feature) => (
-                  <li key={feature} className="flex items-start gap-2">
-                    <span className={`${colorSet.text} font-bold`}>•</span>
-                    <span>{feature}</span>
-                  </li>
-                ))}
-              </ul>
-              <div className="mt-7">
-                <motion.div
-                  whileHover={{ scale: 1.05 }}
-                  whileTap={{ scale: 0.95 }}
-                >
-                  <Link href={user ? "/dashboard" : "/auth/register"}>
-                    <MarketingButton className="w-full">
-                      {user ? "Manage Plan" : `Start with ${plan.name}`}
-                    </MarketingButton>
-                  </Link>
-                </motion.div>
-              </div>
-            </motion.article>
-          );
-        })}
-      </section>
+      <SubscriptionPlanCards plans={packages} mode="pricing" hasUser={!!user} />
 
       <motion.section
         initial={{ opacity: 0, y: 20 }}

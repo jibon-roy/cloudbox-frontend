@@ -1,7 +1,16 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 "use client";
 
-import { BarChart2, Building2, Folder, Home, LogOut, Menu } from "lucide-react";
+import {
+  BarChart2,
+  Building2,
+  CreditCard,
+  Folder,
+  Home,
+  LogOut,
+  Menu,
+  Package,
+} from "lucide-react";
 import Link from "next/link";
 import { useState } from "react";
 import { logoutHandler } from "@/src/utils/handleLogout";
@@ -79,6 +88,20 @@ export default function Sidebar() {
             <div className="space-y-1">
               <NavItem href="/dashboard" icon={Home} onClick={closeMobile}>
                 Dashboard
+              </NavItem>
+              <NavItem
+                href="/dashboard/my-subscription"
+                icon={Package}
+                onClick={closeMobile}
+              >
+                My Subscription
+              </NavItem>
+              <NavItem
+                href="/dashboard/billing-history"
+                icon={CreditCard}
+                onClick={closeMobile}
+              >
+                Billing History
               </NavItem>
               <NavItem href="/demo" icon={BarChart2} onClick={closeMobile}>
                 Demo

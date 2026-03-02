@@ -1,15 +1,20 @@
 "use client";
 
 import { motion } from "framer-motion";
+import Link from "next/link";
 import {
-  useGetMyBillingsQuery,
   useGetMyFilesQuery,
   useGetMyFoldersQuery,
   useGetMyStorageQuery,
   useGetMySubscriptionQuery,
 } from "@/src/redux/features/dashboard/dashboardApi";
 import { useAppSelector } from "@/src/redux/hooks";
-import { selectCurrentToken } from "@/src/redux/features/auth/authSlice";
+import {
+  selectCurrentSubscription,
+  selectCurrentToken,
+} from "@/src/redux/features/auth/authSlice";
+import { useState } from "react";
+import { X } from "lucide-react";
 
 const baseCardClass =
   "rounded-2xl border border-border-subtle bg-surface p-5 lg:p-6";
@@ -52,6 +57,7 @@ const numberValue = (value: unknown, fallback = 0) => {
 
 const UserOverview = () => {
   const accessToken = useAppSelector(selectCurrentToken);
+  const persistedSubscription = useAppSelector(selectCurrentSubscription);
   const skip = !accessToken;
 
   const { data: storageRaw, isLoading: storageLoading } = useGetMyStorageQuery(
@@ -62,8 +68,6 @@ const UserOverview = () => {
   );
   const { data: subscriptionRaw, isLoading: subscriptionLoading } =
     useGetMySubscriptionQuery(undefined, { skip });
-  const { data: billingsRaw, isLoading: billingsLoading } =
-    useGetMyBillingsQuery({ page: 1, limit: 5 }, { skip });
   const { data: filesRaw, isLoading: filesLoading } = useGetMyFilesQuery(
     {
       page: 1,
@@ -93,32 +97,115 @@ const UserOverview = () => {
   const subscription = extractObj(subscriptionRaw);
   const files = extractArray(filesRaw).slice(0, 6);
   const folders = extractArray(foldersRaw).slice(0, 6);
-  const billings = extractArray(billingsRaw).slice(0, 5);
 
-  const used = numberValue(storage.usedStorage ?? storage.used ?? 0);
-  const total = numberValue(storage.totalStorage ?? storage.limit ?? 0);
+  const storageSubscription =
+    storage.subscription &&
+    typeof storage.subscription === "object" &&
+    !Array.isArray(storage.subscription)
+      ? (storage.subscription as Record<string, unknown>)
+      : {};
+
+  const used = numberValue(
+    storageSubscription.used_storage_mb ??
+      storage.used_storage_mb ??
+      storage.usedStorage ??
+      storage.used ??
+      0,
+  );
+  const total = numberValue(
+    storageSubscription.max_storage_mb ??
+      storage.total_storage_mb ??
+      storage.totalStorage ??
+      storage.limit ??
+      0,
+  );
+  const filesCount = numberValue(storage.total_files, files.length);
+  const foldersCount = numberValue(storage.total_folders, folders.length);
+
   const usedPercent =
-    total > 0 ? Math.min(100, Math.round((used / total) * 100)) : 0;
+    numberValue(storageSubscription.used_percentage, -1) >= 0
+      ? Math.min(100, numberValue(storageSubscription.used_percentage, 0))
+      : total > 0
+        ? Math.min(100, Math.round((used / total) * 100))
+        : 0;
+
+  const subscriptionPayload =
+    subscriptionRaw && typeof subscriptionRaw === "object"
+      ? ((subscriptionRaw as { data?: unknown }).data ?? subscriptionRaw)
+      : null;
+
+  const hasApiSubscription =
+    (!!subscriptionPayload &&
+      typeof subscriptionPayload === "object" &&
+      !Array.isArray(subscriptionPayload) &&
+      Object.keys(subscriptionPayload as Record<string, unknown>).length > 0) ||
+    Object.keys(storageSubscription).length > 0;
+  const hasPersistedSubscription =
+    !!persistedSubscription &&
+    typeof persistedSubscription === "object" &&
+    Object.keys(persistedSubscription as Record<string, unknown>).length > 0;
+  const shouldShowSubscriptionStep =
+    !subscriptionLoading && !hasApiSubscription && !hasPersistedSubscription;
 
   const isLoading =
-    storageLoading ||
-    subscriptionLoading ||
-    billingsLoading ||
-    filesLoading ||
-    foldersLoading;
+    storageLoading || subscriptionLoading || filesLoading || foldersLoading;
+
+  const [showWelcome, setShowWelcome] = useState(true);
+
+  const handleWelcomeClose = () => {
+    setShowWelcome(false);
+  };
+
+  if (shouldShowSubscriptionStep) {
+    return (
+      <div className="rounded-2xl border border-border-subtle bg-surface p-6 lg:p-8">
+        <p className="text-sm font-semibold text-primary">STEP 1 OF 1</p>
+        <h1 className="mt-2 text-2xl font-bold text-app-text lg:text-3xl">
+          Select Subscription
+        </h1>
+        <p className="mt-3 max-w-2xl text-sm leading-7 text-muted lg:text-base">
+          You don&apos;t have an active subscription yet. Choose a package from
+          pricing to continue to your dashboard.
+        </p>
+
+        <div className="mt-6 flex flex-wrap gap-3">
+          <Link
+            href="/pricing"
+            className="rounded-xl bg-primary px-5 py-2.5 text-sm font-semibold text-text-inverse transition-colors hover:bg-primary-strong"
+          >
+            Next
+          </Link>
+          <Link
+            href="/"
+            className="rounded-xl border border-border-subtle bg-surface px-5 py-2.5 text-sm font-semibold text-app-text transition-colors hover:bg-surface-soft"
+          >
+            Cancel
+          </Link>
+        </div>
+      </div>
+    );
+  }
 
   return (
     <div className="space-y-6">
-      <div className="section-bg-accent rounded-2xl border border-border-subtle p-6 lg:p-8">
-        <p className="text-sm font-semibold text-accent">USER DASHBOARD</p>
-        <h1 className="mt-2 text-2xl font-bold text-app-text lg:text-4xl">
-          Welcome to Your CloudBox Workspace
-        </h1>
-        <p className="mt-3 max-w-3xl text-sm leading-7 text-muted lg:text-base">
-          Track storage usage, active subscription, recent files, folders, and
-          billing activities with a responsive dashboard experience.
-        </p>
-      </div>
+      {showWelcome && (
+        <div className="section-bg-accent relative rounded-2xl border border-border-subtle p-6 lg:p-8">
+          <p className="text-sm font-semibold text-accent">USER DASHBOARD</p>
+          <h1 className="mt-2 text-2xl font-bold text-app-text lg:text-4xl">
+            Welcome to Your CloudBox Workspace
+          </h1>
+          <p className="mt-3 max-w-3xl text-sm leading-7 text-muted lg:text-base">
+            Track storage usage, active subscription, recent files, folders, and
+            billing activities with a responsive dashboard experience.
+          </p>
+          <button
+            onClick={handleWelcomeClose}
+            className="absolute top-4 right-4 cursor-pointer rounded-full border border-border-subtle bg-surface p-2 hover:bg-surface-soft"
+          >
+            <X className="h-5 w-5 text-app-text" />
+          </button>
+        </div>
+      )}
 
       <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 xl:grid-cols-4">
         <motion.div
@@ -146,7 +233,10 @@ const UserOverview = () => {
           <p className="text-sm text-muted">Subscription</p>
           <p className="mt-2 text-2xl font-bold text-app-text">
             {String(
-              subscription.packageName ?? subscription.planName ?? "Free",
+              storageSubscription.packageName ??
+                subscription.packageName ??
+                subscription.planName ??
+                "Free",
             )}
           </p>
         </motion.div>
@@ -156,7 +246,7 @@ const UserOverview = () => {
         >
           <p className="text-sm text-muted">Files / Folders</p>
           <p className="mt-2 text-2xl font-bold text-app-text">
-            {files.length} / {folders.length}
+            {filesCount} / {foldersCount}
           </p>
         </motion.div>
       </div>
@@ -234,59 +324,6 @@ const UserOverview = () => {
               })
             )}
           </div>
-        </div>
-      </div>
-
-      <div className={baseCardClass}>
-        <h2 className="text-lg font-semibold text-app-text">
-          Recent Billing History
-        </h2>
-        <div className="mt-4 overflow-x-auto">
-          <table className="w-full min-w-160 text-left text-sm">
-            <thead>
-              <tr className="border-b border-border-subtle text-muted">
-                <th className="pb-2 pr-3">Reference</th>
-                <th className="pb-2 pr-3">Amount</th>
-                <th className="pb-2 pr-3">Status</th>
-              </tr>
-            </thead>
-            <tbody>
-              {billings.length === 0 ? (
-                <tr>
-                  <td colSpan={3} className="py-4 text-muted">
-                    {isLoading
-                      ? "Loading billing history..."
-                      : "No billing history found."}
-                  </td>
-                </tr>
-              ) : (
-                billings.map((item, index) => {
-                  const reference = String(
-                    item.reference ?? item.id ?? `BILL-${index + 1}`,
-                  );
-                  const amount = numberValue(item.amount ?? item.total ?? 0);
-                  const status = String(item.status ?? "pending");
-
-                  return (
-                    <tr
-                      key={`${reference}-${index}`}
-                      className="border-b border-border-subtle/60"
-                    >
-                      <td className="py-3 pr-3 text-app-text">{reference}</td>
-                      <td className="py-3 pr-3 text-app-text">
-                        ${amount.toLocaleString()}
-                      </td>
-                      <td className="py-3 pr-3">
-                        <span className="rounded-full bg-surface-soft px-2 py-1 text-xs text-app-text">
-                          {status}
-                        </span>
-                      </td>
-                    </tr>
-                  );
-                })
-              )}
-            </tbody>
-          </table>
         </div>
       </div>
     </div>

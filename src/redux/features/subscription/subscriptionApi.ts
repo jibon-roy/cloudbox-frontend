@@ -25,8 +25,37 @@ const subscriptionApi = baseApi.injectEndpoints({
       }),
       providesTags: ["subscription", "user"],
     }),
+    buySubscription: builder.mutation({
+      query: (id) => {
+        return {
+          url: `subscription/buy/${id}`,
+          method: "POST",
+        };
+      },
+      invalidatesTags: ["subscription", "user"],
+    }),
+    getCurrentSubscription: builder.query({
+      query: () => ({
+        url: `subscription/current`,
+        method: "GET",
+      }),
+      providesTags: ["subscription", "user"],
+    }),
+    confirmPayment: builder.mutation({
+      query: (sessionId) => ({
+        url: `subscription/confirm-payment`,
+        method: "POST",
+        body: { session_id: sessionId },
+      }),
+      invalidatesTags: ["subscription", "user"],
+    }),
   }),
 });
 
-export const { useGetAllSubscriptionQuery, useGetSingleSubscriptionQuery } =
-  subscriptionApi;
+export const {
+  useGetAllSubscriptionQuery,
+  useGetSingleSubscriptionQuery,
+  useBuySubscriptionMutation,
+  useGetCurrentSubscriptionQuery,
+  useConfirmPaymentMutation,
+} = subscriptionApi;
