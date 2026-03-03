@@ -77,6 +77,13 @@ const authApi = baseApi.injectEndpoints({
       }),
       providesTags: ["user"],
     }),
+    contactAdmin: builder.mutation({
+      query: (payload) => ({
+        url: "admin/contact",
+        method: "POST",
+        body: payload,
+      }),
+    }),
   }),
 });
 
@@ -89,4 +96,5 @@ export const {
   useUpdateUserMutation,
   useOtpMutation,
   useGetMeQuery,
+  useContactAdminMutation,
 } = authApi;

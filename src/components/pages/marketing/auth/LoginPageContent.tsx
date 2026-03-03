@@ -3,6 +3,7 @@
 import Link from "next/link";
 import { motion } from "framer-motion";
 import { useState } from "react";
+import { LogIn, Cloud, User } from "lucide-react";
 import { useRouter } from "next/navigation";
 import { useDispatch } from "react-redux";
 import Swal from "sweetalert2";
@@ -154,11 +155,25 @@ const LoginPageContent = () => {
             After sign in, users can upload and manage files only within package
             limits set by admin.
           </p>
-          <div className="mt-6 space-y-3 rounded-2xl border border-border-subtle bg-surface p-4">
+          <div className="mt-6 space-y-3 rounded-2xl border border-border-subtle bg-surface p-4 relative overflow-hidden">
+            {/* Floating icons (purely decorative) */}
+            <LogIn
+              size={28}
+              className="absolute top-20 right-30 text-accent opacity-80 animate-pulse"
+            />
+            <User
+              size={20}
+              className="absolute top-4 left-3 text-primary opacity-80 animate-bounce"
+            />
+            <Cloud
+              size={18}
+              className="absolute bottom-3 right-4 text-info opacity-70 animate-spin"
+            />
+
             <div className="h-10 rounded-xl bg-surface-soft" />
             <div className="h-10 rounded-xl bg-surface-soft" />
             <div className="h-24 rounded-xl bg-surface-soft" />
-            <p className="text-xs text-muted">Workspace preview placeholder</p>
+            <p className="text-xs text-muted">Login to your CloudBox Workspace</p>
           </div>
         </motion.div>
       </div>

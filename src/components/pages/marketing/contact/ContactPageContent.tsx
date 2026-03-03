@@ -1,11 +1,63 @@
 "use client";
 
+import { useState } from "react";
 import { motion } from "framer-motion";
 import { MapPin, Globe, Navigation, Compass } from "lucide-react";
 import MarketingButton from "../MarketingButton";
 import MarketingInput from "../MarketingInput";
+import { useContactAdminMutation } from "@/src/redux/features/auth/authApi";
+import Swal from "sweetalert2";
+import { colors } from "@/src/lib/colors";
 
 const ContactPageContent = () => {
+  const [fullName, setFullName] = useState("");
+  const [workEmail, setWorkEmail] = useState("");
+  const [company, setCompany] = useState("");
+  const [phone, setPhone] = useState("");
+  const [message, setMessage] = useState("");
+  const [contactAdmin, { isLoading }] = useContactAdminMutation();
+  const [status, setStatus] = useState<{
+    type: "success" | "error";
+    text: string;
+  } | null>(null);
+
+  const handleSubmit = async (e: any) => {
+    e.preventDefault();
+    setStatus(null);
+
+    try {
+      await contactAdmin({
+        fullName,
+        workEmail,
+        company,
+        phone,
+        message,
+      }).unwrap();
+
+      setStatus({ type: "success", text: "Message sent successfully." });
+      Swal.fire({
+        icon: "success",
+        title: "Message sent",
+        text: "We received your message and will contact you soon.",
+        confirmButtonColor: colors.primary,
+      });
+      setFullName("");
+      setWorkEmail("");
+      setCompany("");
+      setPhone("");
+      setMessage("");
+    } catch (err: any) {
+      const msg = err?.data?.message || err?.message || "Something went wrong.";
+      setStatus({ type: "error", text: msg });
+      Swal.fire({
+        icon: "error",
+        title: "Submission failed",
+        text: msg,
+        confirmButtonColor: colors.primary,
+      });
+    }
+  };
+
   return (
     <div className="mx-auto w-full max-w-7xl space-y-12 px-5 pb-10 pt-12 lg:px-10">
       <motion.section
@@ -35,6 +87,7 @@ const ContactPageContent = () => {
           viewport={{ once: true }}
           whileHover={{ scale: 1.01 }}
           className="space-y-5 section-bg-info rounded-3xl border border-border-subtle p-8 lg:p-10"
+          onSubmit={handleSubmit}
         >
           <div className="mb-6">
             <h2 className="text-2xl font-bold text-app-text">
@@ -45,14 +98,31 @@ const ContactPageContent = () => {
               hours.
             </p>
           </div>
-          <MarketingInput label="Full Name" placeholder="Enter your name" />
+          <MarketingInput
+            label="Full Name"
+            placeholder="Enter your name"
+            value={fullName}
+            onChange={(e) => setFullName(e.target.value)}
+          />
           <MarketingInput
             label="Work Email"
             type="email"
             placeholder="you@company.com"
+            value={workEmail}
+            onChange={(e) => setWorkEmail(e.target.value)}
           />
-          <MarketingInput label="Company" placeholder="Company name" />
-          <MarketingInput label="Phone" placeholder="+8801XXXXXXXXX" />
+          <MarketingInput
+            label="Company"
+            placeholder="Company name"
+            value={company}
+            onChange={(e) => setCompany(e.target.value)}
+          />
+          <MarketingInput
+            label="Phone"
+            placeholder="+8801XXXXXXXXX"
+            value={phone}
+            onChange={(e) => setPhone(e.target.value)}
+          />
           <div className="space-y-3">
             <label
               htmlFor="message"
@@ -65,10 +135,28 @@ const ContactPageContent = () => {
               rows={6}
               className="w-full rounded-xl border border-border-subtle bg-surface px-5 py-3 text-base text-app-text outline-none transition-all duration-300 placeholder:text-muted focus:border-primary focus:ring-2 focus:ring-ring-brand"
               placeholder="Share your use case"
+              value={message}
+              onChange={(e) => setMessage(e.target.value)}
             />
           </div>
+          {status ? (
+            <p
+              className={`text-sm font-medium ${
+                status.type === "success" ? "text-success" : "text-destructive"
+              }`}
+            >
+              {status.text}
+            </p>
+          ) : null}
+
           <motion.div whileHover={{ scale: 1.03 }} whileTap={{ scale: 0.97 }}>
-            <MarketingButton className="w-full">Send Message</MarketingButton>
+            <MarketingButton
+              className="w-full"
+              type="submit"
+              disabled={isLoading}
+            >
+              {isLoading ? "Sending..." : "Send Message"}
+            </MarketingButton>
           </motion.div>
         </motion.form>
 
