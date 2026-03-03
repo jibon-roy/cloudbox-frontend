@@ -4,8 +4,16 @@
 <url><loc>https://example.com/auth/register</loc><lastmod>2026-03-02T14:10:54.754Z</lastmod><changefreq>weekly</changefreq><priority>0.8</priority></url>
 <url><loc>https://example.com/about</loc><lastmod>2026-03-02T14:10:53.354Z</lastmod><changefreq>weekly</changefreq><priority>0.8</priority></url>
 <url><loc>https://example.com/contact</loc><lastmod>2026-03-02T14:10:53.354Z</lastmod><changefreq>weekly</changefreq><priority>0.8</priority></url>
-<url><loc>https://example.com/demo</loc><lastmod>2025-12-25T07:05:44.000Z</lastmod><changefreq>weekly</changefreq><priority>0.8</priority></url>
 <url><loc>https://example.com</loc><lastmod>2026-03-02T14:43:50.566Z</lastmod><changefreq>weekly</changefreq><priority>0.8</priority></url>
 <url><loc>https://example.com/pricing</loc><lastmod>2026-03-02T14:10:57.067Z</lastmod><changefreq>weekly</changefreq><priority>0.8</priority></url>
+<url><loc>https://example.com/dashboard/billing-payments</loc><lastmod>2026-03-03T13:45:20.477Z</lastmod><changefreq>weekly</changefreq><priority>0.8</priority></url>
+<url><loc>https://example.com/dashboard/manage-subscriptions</loc><lastmod>2026-03-03T13:25:17.094Z</lastmod><changefreq>weekly</changefreq><priority>0.8</priority></url>
+<url><loc>https://example.com/dashboard/manage-users</loc><lastmod>2026-03-03T14:06:37.175Z</lastmod><changefreq>weekly</changefreq><priority>0.8</priority></url>
+<url><loc>https://example.com/dashboard/user-subscriptions</loc><lastmod>2026-03-03T14:05:22.472Z</lastmod><changefreq>weekly</changefreq><priority>0.8</priority></url>
+<url><loc>https://example.com/dashboard/billing-history</loc><lastmod>2026-03-02T18:29:30.861Z</lastmod><changefreq>weekly</changefreq><priority>0.8</priority></url>
+<url><loc>https://example.com/dashboard/file-manager</loc><lastmod>2026-03-02T20:32:09.339Z</lastmod><changefreq>weekly</changefreq><priority>0.8</priority></url>
+<url><loc>https://example.com/dashboard/my-subscription</loc><lastmod>2026-03-02T18:33:01.692Z</lastmod><changefreq>weekly</changefreq><priority>0.8</priority></url>
 <url><loc>https://example.com/dashboard</loc><lastmod>2025-12-25T07:05:44.000Z</lastmod><changefreq>weekly</changefreq><priority>0.8</priority></url>
+<url><loc>https://example.com/dashboard/settings</loc><lastmod>2026-03-03T13:25:17.095Z</lastmod><changefreq>weekly</changefreq><priority>0.8</priority></url>
+<url><loc>https://example.com/payments/stripe/success</loc><lastmod>2026-03-02T19:20:53.810Z</lastmod><changefreq>weekly</changefreq><priority>0.8</priority></url>
 </urlset>

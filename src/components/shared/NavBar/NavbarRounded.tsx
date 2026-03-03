@@ -5,8 +5,9 @@ import { X } from "lucide-react";
 import { GiHamburgerMenu } from "react-icons/gi";
 import { usePathname } from "next/navigation";
 import Link from "next/link";
-import Logo from "../logo/Logo";
+
 import { Button } from "@/src/components/ui/button/Button";
+import Logo from "../../ui-library/logo";
 
 const NavBarRounded = () => {
   const [isMobileMenuOpen, setMobileMenuOpen] = useState(false);
@@ -74,7 +75,7 @@ const NavBarRounded = () => {
     <>
       <motion.nav
         className="shadow-xl shadow-black/5 bg-[#FFFFFFA3] px-5 py-1 sm:py-3 border overflow-hidden border-black/10 
-      lg:mt-5 lg:rounded-full fixed w-full max-w-[1400px] lg:right-1/2 lg:translate-x-1/2 z-99999"
+      lg:mt-5 lg:rounded-full fixed w-full max-w-350 lg:right-1/2 lg:translate-x-1/2 z-99999"
         initial={{ opacity: 1, y: 0 }}
         animate={{
           opacity: showNavbar ? 1 : 0,

@@ -5,8 +5,9 @@ import Link from "next/link";
 import { useSelector } from "react-redux";
 import { RootState } from "@/src/redux/store";
 import { Button } from "@/src/components/ui/button/Button";
-import Logo from "../../logo/Logo";
+
 import UserDropdown from "../UserDropdown";
+import Logo from "@/src/components/ui-library/logo";
 
 const NavBar = () => {
   const user = useSelector((state: RootState) => state.auth.user);
@@ -64,7 +65,7 @@ const NavBar = () => {
   return (
     <div className="mb-16 lg:mb-20">
       <Navbar
-        className="max-w-[1920px]  mx-auto sm:px-[1.5%]"
+        className="max-w-480  mx-auto sm:px-[1.5%]"
         position="fixed"
         shadow="shadow-xl"
         backgroundColor="bg-[#0F172A] lg:py-4"
