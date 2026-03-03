@@ -3,7 +3,10 @@
 import Link from "next/link";
 import { useMemo, useState } from "react";
 import { useGetMySubscriptionQuery } from "@/src/redux/features/dashboard/dashboardApi";
-import { useGetAllSubscriptionQuery, useGetCurrentSubscriptionQuery } from "@/src/redux/features/subscription/subscriptionApi";
+import {
+  useGetAllSubscriptionQuery,
+  useGetCurrentSubscriptionQuery,
+} from "@/src/redux/features/subscription/subscriptionApi";
 import SubscriptionPlanCards, {
   PricingPlanCardItem,
 } from "../marketing/pricing/SubscriptionPlanCards";
@@ -51,7 +54,7 @@ export default function DashboardAccessGate({ children }: Props) {
     useGetMySubscriptionQuery(undefined, {
       skip: !accessToken || !isUserRole,
     });
-  
+
   const { data: allSubscriptionsRaw, isLoading: plansLoading } =
     useGetAllSubscriptionQuery({}, { skip: !isLoggedIn || !isUserRole });
 
@@ -70,7 +73,6 @@ export default function DashboardAccessGate({ children }: Props) {
       ? ((allSubscriptionsRaw as { data: Array<Record<string, unknown>> })
           .data ?? [])
       : [];
-  
 
     return rawPlans
       .filter((plan) => Boolean(plan?.is_active))
@@ -102,8 +104,6 @@ export default function DashboardAccessGate({ children }: Props) {
         };
       });
   }, [allSubscriptionsRaw]);
-
-  console.log(plans)
 
   const hasPersistedSubscription = isNonEmptyObject(persistedSubscription);
   const hasApiSubscription = isNonEmptyObject(apiSubscription);

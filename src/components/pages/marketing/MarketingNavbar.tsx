@@ -13,7 +13,6 @@ import {
   selectCurrentUser,
   selectCurrentToken,
 } from "@/src/redux/features/auth/authSlice";
-import Profile01 from "../dashboardLayout/profile-01";
 import UserDropdown from "../../shared/NavBar/UserDropdown";
 
 const ThemeSwitch = dynamic(() => import("../../ui/theme/ThemeSwitch"), {
@@ -62,31 +61,32 @@ const MarketingNavbar = () => {
             );
           })}
         </div>
+        <div className="flex items-center gap-2">
+          <div className="flex items-center gap-2">
+            <ThemeSwitch variant="toggle" />
+            {isLoggedIn ? (
+              <UserDropdown />
+            ) : (
+              <div className="hidden items-center gap-2 md:flex">
+                <Link href="/auth/login">
+                  <MarketingButton variant="ghost">Log in</MarketingButton>
+                </Link>
+                <Link href="/auth/register">
+                  <MarketingButton>Get Started</MarketingButton>
+                </Link>
+              </div>
+            )}
+          </div>
 
-        <div className="hidden items-center gap-3 md:flex">
-          <ThemeSwitch variant="toggle" />
-          {isLoggedIn ? (
-            <UserDropdown />
-          ) : (
-            <>
-              <Link href="/auth/login">
-                <MarketingButton variant="ghost">Log in</MarketingButton>
-              </Link>
-              <Link href="/auth/register">
-                <MarketingButton>Get Started</MarketingButton>
-              </Link>
-            </>
-          )}
+          <button
+            type="button"
+            onClick={() => setOpen((value) => !value)}
+            aria-label="Toggle menu"
+            className="rounded-xl border border-border-subtle bg-surface p-2 text-app-text md:hidden"
+          >
+            {open ? <X size={18} /> : <Menu size={18} />}
+          </button>
         </div>
-
-        <button
-          type="button"
-          onClick={() => setOpen((value) => !value)}
-          aria-label="Toggle menu"
-          className="rounded-xl border border-border-subtle bg-surface p-2 text-app-text md:hidden"
-        >
-          {open ? <X size={18} /> : <Menu size={18} />}
-        </button>
       </nav>
 
       <AnimatePresence>
@@ -108,30 +108,8 @@ const MarketingNavbar = () => {
                   {item.label}
                 </Link>
               ))}
-              <div className="flex items-center justify-center py-2">
-                <ThemeSwitch variant="toggle" />
-              </div>
               {isLoggedIn ? (
-                <div className="border-t border-border-subtle pt-2 mt-2">
-                  <div className="flex items-center gap-3 px-3 py-2 rounded-lg bg-surface-soft mb-2">
-                    <img
-                      src={userAvatar}
-                      alt={userName}
-                      className="w-8 h-8 rounded-full object-cover"
-                    />
-                    <div>
-                      <p className="text-sm font-medium text-app-text">
-                        {userName}
-                      </p>
-                      <p className="text-xs text-muted">{userRole}</p>
-                    </div>
-                  </div>
-                  <Profile01
-                    name={userName}
-                    role={userRole}
-                    avatar={userAvatar}
-                  />
-                </div>
+                ""
               ) : (
                 <div className="grid grid-cols-2 gap-2 pt-2">
                   <Link href="/auth/login" onClick={() => setOpen(false)}>

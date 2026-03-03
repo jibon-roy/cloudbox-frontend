@@ -4,7 +4,6 @@ import {
   DropdownMenu,
   DropdownMenuTrigger,
 } from "../../pages/dashboardLayout/dropdown-menu";
-import Image from "next/image";
 import { RootState } from "@/src/redux/store";
 
 const UserDropdown = ({ className }: { className?: string }) => {
@@ -12,17 +11,23 @@ const UserDropdown = ({ className }: { className?: string }) => {
   if (!user) {
     return <div></div>;
   }
+
+  // Helper to get avatar URL with fallback
+
+  const userName = user?.full_name || user?.name || user?.email || "User";
+  const userAvatar = user?.avatar_url || "/user.png";
+
   return (
-    <div className={className}>
+    <div className={`relative flex items-center ${className || ""}`}>
       <DropdownMenu>
         <DropdownMenuTrigger className="focus:outline-none">
           <div className="flex items-center gap-2">
-            <Image
-              src="/user.png"
-              alt="User avatar"
+            <img
+              src={userAvatar}
+              alt={`${userName}'s avatar`}
               width={28}
               height={28}
-              className="rounded-full ring-2 ring-gray-200 dark:ring-[#2B2B30] sm:w-9 sm:h-9 cursor-pointer"
+              className="rounded-full ring-2 ring-gray-200 dark:ring-[#2B2B30] w-9 h-9 cursor-pointer"
             />
           </div>
         </DropdownMenuTrigger>

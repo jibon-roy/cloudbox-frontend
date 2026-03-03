@@ -43,6 +43,8 @@ export default authSlice.reducer;
 
 export const selectCurrentToken = (state: RootState) =>
   (state.auth as TAuthState).access_token;
+export const selectCurrentRefreshToken = (state: RootState) =>
+  (state.auth as TAuthState).refresh_token;
 export const selectCurrentUser = (state: RootState) =>
   (state.auth as TAuthState).user;
 export const selectCurrentSubscription = (state: RootState) =>
