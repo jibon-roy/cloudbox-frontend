@@ -2,14 +2,13 @@
 
 import { motion } from "framer-motion";
 import {
-  useGetActiveSubscriptionsQuery,
   useGetAdminBillingsQuery,
   useGetAdminSummaryQuery,
   useGetUsersAdminQuery,
-  useGetWeeklyTrafficQuery,
 } from "@/src/redux/features/dashboard/dashboardApi";
 import { useAppSelector } from "@/src/redux/hooks";
 import { selectCurrentToken } from "@/src/redux/features/auth/authSlice";
+import UserTrafficChart from "./UserTrafficChart";
 
 const cardClasses =
   "rounded-2xl border border-border-subtle bg-surface p-5 lg:p-6";
@@ -39,24 +38,14 @@ const AdminOverview = () => {
   const accessToken = useAppSelector(selectCurrentToken);
   const skip = !accessToken;
 
-  const { data: summaryRaw, isLoading: summaryLoading } = useGetAdminSummaryQuery(
-    undefined,
-    { skip }
-  );
-  const { data: trafficRaw, isLoading: trafficLoading } = useGetWeeklyTrafficQuery(
-    undefined,
-    { skip }
-  );
+  const { data: summaryRaw, isLoading: summaryLoading } =
+    useGetAdminSummaryQuery(undefined, { skip });
   const { data: usersRaw, isLoading: usersLoading } = useGetUsersAdminQuery(
     { page: 1, limit: 5, sortBy: "createdAt", sortOrder: "desc", search: "" },
-    { skip }
+    { skip },
   );
-  const { data: billingsRaw, isLoading: billingsLoading } = useGetAdminBillingsQuery(
-    { page: 1, limit: 6 },
-    { skip }
-  );
-  const { data: subscriptionsRaw, isLoading: subscriptionsLoading } =
-    useGetActiveSubscriptionsQuery({ page: 1, limit: 5 }, { skip });
+  const { data: billingsRaw, isLoading: billingsLoading } =
+    useGetAdminBillingsQuery({ page: 1, limit: 6 }, { skip });
 
   const summary =
     (summaryRaw as { data?: Record<string, unknown> } | undefined)?.data ??
@@ -65,38 +54,32 @@ const AdminOverview = () => {
 
   const totalUsers = extractNumber(
     summary.totalUsers ?? summary.users ?? summary.userCount,
-    extractArray(usersRaw).length
+    extractArray(usersRaw).length,
   );
-  const activeSubscriptions = extractNumber(
-    summary.activeSubscriptions ?? summary.subscriptionCount,
-    extractArray(subscriptionsRaw).length
+  const totalTransactions = extractNumber(
+    summary.totalTransactions ??
+      summary.transactions ??
+      summary.transactionCount,
+    0,
   );
-  const totalRevenue = extractNumber(
-    summary.totalRevenue ?? summary.revenue ?? summary.totalAmount,
-    0
+  const totalSubscribers = extractNumber(
+    summary.totalSubscribers ??
+      summary.activeSubscriptions ??
+      summary.subscriptionCount,
+    0,
   );
-  const totalFiles = extractNumber(
-    summary.totalFiles ?? summary.files ?? summary.fileCount,
-    0
-  );
-
-  const trafficItems = extractArray(trafficRaw);
-  const maxTraffic = Math.max(
-    ...trafficItems.map((entry) =>
-      extractNumber(entry.count ?? entry.total ?? entry.value, 0)
-    ),
-    1
+  const totalIncome = extractNumber(
+    summary.totalIncome ??
+      summary.totalRevenue ??
+      summary.revenue ??
+      summary.totalAmount,
+    0,
   );
 
   const recentUsers = extractArray(usersRaw).slice(0, 5);
   const recentBillings = extractArray(billingsRaw).slice(0, 6);
 
-  const isLoading =
-    summaryLoading ||
-    trafficLoading ||
-    usersLoading ||
-    billingsLoading ||
-    subscriptionsLoading;
+  const isLoading = summaryLoading || usersLoading || billingsLoading;
 
   return (
     <div className="space-y-6">
@@ -106,8 +89,9 @@ const AdminOverview = () => {
           CloudBox Platform Overview
         </h1>
         <p className="mt-3 max-w-3xl text-sm leading-7 text-muted lg:text-base">
-          Monitor users, subscriptions, billing and traffic in one place. All data
-          comes from your backend endpoints defined in the Postman collection.
+          Monitor users, subscriptions, billing and traffic in one place. All
+          data comes from your backend endpoints defined in the Postman
+          collection.
         </p>
       </div>
 
@@ -119,18 +103,18 @@ const AdminOverview = () => {
             accent: "border-l-primary",
           },
           {
-            label: "Active Subscriptions",
-            value: activeSubscriptions.toLocaleString(),
+            label: "Total Transactions",
+            value: totalTransactions.toLocaleString(),
             accent: "border-l-info",
           },
           {
-            label: "Total Files",
-            value: totalFiles.toLocaleString(),
+            label: "Total Subscribers",
+            value: totalSubscribers.toLocaleString(),
             accent: "border-l-purple",
           },
           {
-            label: "Total Revenue",
-            value: `$${totalRevenue.toLocaleString()}`,
+            label: "Total Income",
+            value: `$${totalIncome.toLocaleString()}`,
             accent: "border-l-success",
           },
         ].map((item) => (
@@ -140,50 +124,17 @@ const AdminOverview = () => {
             className={`${cardClasses} border-l-4 ${item.accent}`}
           >
             <p className="text-sm text-muted">{item.label}</p>
-            <p className="mt-2 text-2xl font-bold text-app-text">{item.value}</p>
+            <p className="mt-2 text-2xl font-bold text-app-text">
+              {item.value}
+            </p>
           </motion.div>
         ))}
       </div>
 
+      <UserTrafficChart />
+
       <div className="grid grid-cols-1 gap-4 xl:grid-cols-3">
-        <div className={`${cardClasses} xl:col-span-2`}>
-          <h2 className="text-lg font-semibold text-app-text">Weekly Traffic</h2>
-          <div className="mt-4 space-y-3">
-            {trafficItems.length === 0 ? (
-              <p className="text-sm text-muted">
-                {isLoading ? "Loading traffic..." : "No traffic data found."}
-              </p>
-            ) : (
-              trafficItems.slice(0, 7).map((entry, index) => {
-                const label =
-                  String(entry.day ?? entry.label ?? `Day ${index + 1}`) ||
-                  `Day ${index + 1}`;
-                const count = extractNumber(
-                  entry.count ?? entry.total ?? entry.value,
-                  0
-                );
-                const width = Math.max(8, Math.round((count / maxTraffic) * 100));
-
-                return (
-                  <div key={`${label}-${index}`}>
-                    <div className="mb-1 flex items-center justify-between text-sm">
-                      <span className="text-app-text">{label}</span>
-                      <span className="text-muted">{count.toLocaleString()}</span>
-                    </div>
-                    <div className="h-2 rounded-full bg-surface-soft">
-                      <div
-                        className="h-2 rounded-full bg-primary"
-                        style={{ width: `${width}%` }}
-                      />
-                    </div>
-                  </div>
-                );
-              })
-            )}
-          </div>
-        </div>
-
-        <div className={cardClasses}>
+        <div className={`${cardClasses} xl:col-span-1`}>
           <h2 className="text-lg font-semibold text-app-text">Recent Users</h2>
           <div className="mt-4 space-y-3">
             {recentUsers.length === 0 ? (
@@ -193,8 +144,9 @@ const AdminOverview = () => {
             ) : (
               recentUsers.map((item, index) => {
                 const name =
-                  String(item.name ?? item.fullName ?? item.email ?? "Unknown User") ||
-                  "Unknown User";
+                  String(
+                    item.name ?? item.fullName ?? item.email ?? "Unknown User",
+                  ) || "Unknown User";
                 const role = String(item.role ?? "USER");
                 return (
                   <div
@@ -229,23 +181,32 @@ const AdminOverview = () => {
               {recentBillings.length === 0 ? (
                 <tr>
                   <td colSpan={4} className="py-4 text-muted">
-                    {isLoading ? "Loading billings..." : "No billing records found."}
+                    {isLoading
+                      ? "Loading billings..."
+                      : "No billing records found."}
                   </td>
                 </tr>
               ) : (
                 recentBillings.map((item, index) => {
-                  const ref = String(item.reference ?? item.id ?? `INV-${index + 1}`);
+                  const ref = String(
+                    item.reference ?? item.id ?? `INV-${index + 1}`,
+                  );
                   const userName = String(
-                    item.userEmail ?? item.userName ?? item.email ?? "Unknown"
+                    item.userEmail ?? item.userName ?? item.email ?? "Unknown",
                   );
                   const amount = extractNumber(item.amount ?? item.total ?? 0);
                   const status = String(item.status ?? "pending");
 
                   return (
-                    <tr key={`${ref}-${index}`} className="border-b border-border-subtle/60">
+                    <tr
+                      key={`${ref}-${index}`}
+                      className="border-b border-border-subtle/60"
+                    >
                       <td className="py-3 pr-3 text-app-text">{ref}</td>
                       <td className="py-3 pr-3 text-muted">{userName}</td>
-                      <td className="py-3 pr-3 text-app-text">${amount.toLocaleString()}</td>
+                      <td className="py-3 pr-3 text-app-text">
+                        ${amount.toLocaleString()}
+                      </td>
                       <td className="py-3 pr-3">
                         <span className="rounded-full bg-surface-soft px-2 py-1 text-xs text-app-text">
                           {status}

@@ -14,7 +14,15 @@ const dashboardApi = baseApi.injectEndpoints({
     }),
     getWeeklyTraffic: builder.query<unknown, QueryParams | void>({
       query: (params) => ({
-        url: "admin/traffic/weekly",
+        url: "admin/traffic",
+        method: "GET",
+        params: params ?? undefined,
+      }),
+      providesTags: ["generic"],
+    }),
+    getUserTraffic: builder.query<unknown, QueryParams | void>({
+      query: (params) => ({
+        url: "admin/user-traffic",
         method: "GET",
         params: params ?? undefined,
       }),
@@ -88,6 +96,7 @@ const dashboardApi = baseApi.injectEndpoints({
 export const {
   useGetAdminSummaryQuery,
   useGetWeeklyTrafficQuery,
+  useGetUserTrafficQuery,
   useGetAdminBillingsQuery,
   useGetActiveSubscriptionsQuery,
   useGetUsersAdminQuery,
