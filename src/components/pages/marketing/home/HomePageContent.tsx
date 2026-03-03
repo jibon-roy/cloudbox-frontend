@@ -3,6 +3,7 @@
 import { motion } from "framer-motion";
 import Link from "next/link";
 import { useEffect, useRef, useState } from "react";
+import { FileImage, FileText, Film, Music, Archive, Code2 } from "lucide-react";
 import MarketingButton from "../MarketingButton";
 
 const fadeUp = {
@@ -157,9 +158,72 @@ const HomePageContent = () => {
             animate={{ y: [0, -10, 0] }}
             transition={{ repeat: Infinity, duration: 4.5, ease: "easeInOut" }}
             whileHover={{ scale: 1.02 }}
-            className="brand-glass rounded-2xl p-6 cursor-pointer"
+            className="brand-glass rounded-2xl p-6 cursor-pointer relative overflow-hidden"
           >
-            <div className="brand-grid rounded-2xl border border-border-subtle bg-surface p-8">
+            <div className="brand-grid rounded-2xl border border-border-subtle bg-surface p-8 relative">
+              {/* Scattered Icons */}
+              <motion.div
+                animate={{ rotate: 360, y: [0, -5, 0] }}
+                transition={{
+                  rotate: { duration: 8, repeat: Infinity },
+                  y: { duration: 3, repeat: Infinity },
+                }}
+                className="absolute top-2 right-4 opacity-30"
+              >
+                <FileImage size={32} className="text-primary fill-primary" />
+              </motion.div>
+              <motion.div
+                animate={{ rotate: -360, y: [0, 5, 0] }}
+                transition={{
+                  rotate: { duration: 10, repeat: Infinity },
+                  y: { duration: 3.5, repeat: Infinity },
+                }}
+                className="absolute bottom-16 right-6 opacity-25"
+              >
+                <FileText size={28} className="text-accent fill-accent" />
+              </motion.div>
+              <motion.div
+                animate={{ rotate: 360, y: [0, -5, 0] }}
+                transition={{
+                  rotate: { duration: 9, repeat: Infinity },
+                  y: { duration: 4, repeat: Infinity },
+                }}
+                className="absolute top-24 left-2 opacity-25"
+              >
+                <Film size={30} className="text-info fill-info" />
+              </motion.div>
+              <motion.div
+                animate={{ rotate: -360, y: [0, 5, 0] }}
+                transition={{
+                  rotate: { duration: 11, repeat: Infinity },
+                  y: { duration: 3.2, repeat: Infinity },
+                }}
+                className="absolute bottom-4 left-4 opacity-20"
+              >
+                <Music size={26} className="text-purple fill-purple" />
+              </motion.div>
+              <motion.div
+                animate={{ rotate: 360, y: [0, -5, 0] }}
+                transition={{
+                  rotate: { duration: 7, repeat: Infinity },
+                  y: { duration: 3.5, repeat: Infinity },
+                }}
+                className="absolute top-12 right-16 opacity-20"
+              >
+                <Archive size={24} className="text-success fill-success" />
+              </motion.div>
+              <motion.div
+                animate={{ rotate: -360, y: [0, 5, 0] }}
+                transition={{
+                  rotate: { duration: 10, repeat: Infinity },
+                  y: { duration: 3.8, repeat: Infinity },
+                }}
+                className="absolute bottom-20 right-12 opacity-25"
+              >
+                <Code2 size={28} className="text-orange fill-orange" />
+              </motion.div>
+
+              {/* Original Content */}
               <div className="mb-5 h-6 w-40 rounded-full bg-surface-strong" />
               <div className="space-y-4">
                 <div className="h-14 rounded-xl bg-surface-soft" />
@@ -167,7 +231,7 @@ const HomePageContent = () => {
                 <div className="h-14 rounded-xl bg-surface-soft" />
               </div>
               <p className="mt-5 text-sm text-muted">
-                Dashboard preview placeholder
+                Store your files and folders in the cloud
               </p>
             </div>
           </motion.div>

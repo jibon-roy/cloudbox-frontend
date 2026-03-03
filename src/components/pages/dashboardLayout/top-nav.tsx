@@ -41,7 +41,7 @@ export default function TopNav() {
         ))}
       </div>
 
-      <div className="ml-auto flex items-center gap-2 lg:ml-0">
+      <div className="ml-auto flex items-center gap-3 lg:ml-0">
           <ThemeButton />
         {/* <NotificationDetails /> */}
         <UserDropdown />

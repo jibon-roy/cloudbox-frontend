@@ -57,6 +57,7 @@ const LoginPageContent = () => {
           title: "Login Successful!",
           text: `Welcome back, ${user?.name}!`,
           timer: 1500,
+          confirmButtonColor: colors.primary,
         }).then(() => router.push("/dashboard"));
       }
     } catch (err: any) {
@@ -64,7 +65,7 @@ const LoginPageContent = () => {
         icon: "error",
         title: "Login Failed",
         text: err?.data?.message || "Invalid email or password",
-         confirmButtonColor: colors.primary
+        confirmButtonColor: colors.primary,
       });
     }
   };

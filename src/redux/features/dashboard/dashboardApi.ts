@@ -90,6 +90,24 @@ const dashboardApi = baseApi.injectEndpoints({
       }),
       providesTags: ["generic"],
     }),
+    changeBillingStatus: builder.mutation<
+      unknown,
+      { id: string; status: string }
+    >({
+      query: ({ id, status }) => ({
+        url: `billing/${id}/status`,
+        method: "PATCH",
+        body: { status },
+      }),
+      invalidatesTags: ["generic"],
+    }),
+    deactivateUser: builder.mutation<unknown, string>({
+      query: (userId) => ({
+        url: `user/deactivate/${userId}`,
+        method: "PATCH",
+      }),
+      invalidatesTags: ["generic", "user"],
+    }),
   }),
 });
 
@@ -105,4 +123,6 @@ export const {
   useGetMyBillingsQuery,
   useGetMyFilesQuery,
   useGetMyFoldersQuery,
+  useChangeBillingStatusMutation,
+  useDeactivateUserMutation,
 } = dashboardApi;

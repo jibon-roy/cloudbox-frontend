@@ -8,6 +8,7 @@ import {
   Menu,
   Package,
   Settings,
+  Users,
 } from "lucide-react";
 import { RxDashboard } from "react-icons/rx";
 import Link from "next/link";
@@ -119,7 +120,7 @@ export default function Sidebar() {
                   Billing History
                 </NavItem>
                 <NavItem
-                  href="/dashboard/user-settings"
+                  href="/dashboard/settings"
                   icon={Settings}
                   onClick={closeMobile}
                 >
@@ -144,7 +145,28 @@ export default function Sidebar() {
                   Manage Subscriptions
                 </NavItem>
                 <NavItem
-                  href="/dashboard/user-settings"
+                  href="/dashboard/user-subscriptions"
+                  icon={CreditCard}
+                  onClick={closeMobile}
+                >
+                  User Subscriptions
+                </NavItem>
+                <NavItem
+                  href="/dashboard/billing-payments"
+                  icon={CreditCard}
+                  onClick={closeMobile}
+                >
+                  Billing & Payments
+                </NavItem>
+                <NavItem
+                  href="/dashboard/manage-users"
+                  icon={Users}
+                  onClick={closeMobile}
+                >
+                  Manage Users
+                </NavItem>
+                <NavItem
+                  href="/dashboard/settings"
                   icon={Settings}
                   onClick={closeMobile}
                 >

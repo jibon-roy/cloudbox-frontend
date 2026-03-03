@@ -1,6 +1,7 @@
 "use client";
 
 import { motion } from "framer-motion";
+import { MapPin, Globe, Navigation, Compass } from "lucide-react";
 import MarketingButton from "../MarketingButton";
 import MarketingInput from "../MarketingInput";
 
@@ -105,9 +106,80 @@ const ContactPageContent = () => {
             whileHover={{ scale: 1.02, x: 4 }}
             className="rounded-2xl border-2 border-border-subtle bg-surface p-7 border-l-4 border-l-purple cursor-pointer"
           >
-            <p className="text-lg font-bold text-purple">🌍 Interactive Map</p>
-            <div className="mt-4 h-52 rounded-xl border border-border-subtle brand-grid bg-surface-soft flex items-center justify-center">
-              <p className="text-sm text-muted">Map placeholder</p>
+            <p className="text-lg font-bold text-purple">🌍 Global Presence</p>
+            <div className="mt-4 h-52 rounded-xl border border-border-subtle brand-grid bg-surface-soft flex items-center justify-center overflow-hidden relative p-4">
+              {/* Animated background */}
+              <motion.div
+                animate={{ rotate: 360 }}
+                transition={{ duration: 20, repeat: Infinity, ease: "linear" }}
+                className="absolute inset-0 opacity-10"
+              >
+                <div
+                  className="absolute inset-0 rounded-full border border-primary"
+                  style={{ width: "80%", height: "80%", margin: "auto" }}
+                />
+                <div
+                  className="absolute inset-0 rounded-full border border-accent"
+                  style={{ width: "60%", height: "60%", margin: "auto" }}
+                />
+                <div
+                  className="absolute inset-0 rounded-full border border-success"
+                  style={{ width: "40%", height: "40%", margin: "auto" }}
+                />
+              </motion.div>
+
+              {/* Interactive location markers */}
+              <div className="relative w-full h-full flex items-center justify-center">
+                {[
+                  {
+                    Icon: MapPin,
+                    color: "text-primary",
+                    pos: "top-4 left-4",
+                    delay: 0,
+                  },
+                  {
+                    Icon: Globe,
+                    color: "text-accent",
+                    pos: "top-4 right-4",
+                    delay: 0.2,
+                  },
+                  {
+                    Icon: Navigation,
+                    color: "text-success",
+                    pos: "bottom-4 left-4",
+                    delay: 0.4,
+                  },
+                  {
+                    Icon: Compass,
+                    color: "text-orange",
+                    pos: "bottom-4 right-4",
+                    delay: 0.6,
+                  },
+                ].map(({ Icon, color, pos, delay }) => (
+                  <motion.div
+                    key={color}
+                    initial={{ opacity: 0, scale: 0 }}
+                    animate={{ opacity: 1, scale: 1 }}
+                    transition={{ delay, duration: 0.4 }}
+                    whileHover={{ scale: 1.4, y: -4 }}
+                    className={`absolute ${pos} cursor-pointer z-10`}
+                  >
+                    <Icon
+                      size={32}
+                      className={`${color} opacity-70 hover:opacity-100 transition-opacity`}
+                    />
+                  </motion.div>
+                ))}
+
+                {/* Center pulse */}
+                <motion.div
+                  animate={{ scale: [1, 1.3, 1], opacity: [0.5, 1, 0.5] }}
+                  transition={{ duration: 2, repeat: Infinity }}
+                  className="relative z-10"
+                >
+                  <Globe size={40} className="text-info opacity-60" />
+                </motion.div>
+              </div>
             </div>
           </motion.div>
         </motion.div>

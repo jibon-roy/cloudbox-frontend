@@ -6,6 +6,14 @@ import { useState } from "react";
 import { useRouter } from "next/navigation";
 import { useDispatch } from "react-redux";
 import Swal from "sweetalert2";
+import {
+  Upload,
+  FolderOpen,
+  Lock,
+  Share2,
+  FileText,
+  Image,
+} from "lucide-react";
 import MarketingButton from "../MarketingButton";
 import MarketingInput from "../MarketingInput";
 import OTPVerifyModal from "./modals/OTPVerifyModal";
@@ -252,9 +260,45 @@ const SignupPageContent = () => {
               </div>
             ))}
           </div>
-          <div className="mt-6 h-44 rounded-2xl border border-border-subtle brand-grid bg-surface-soft" />
+          <div className="mt-6 h-44 rounded-2xl border border-border-subtle brand-grid bg-surface-soft p-6 flex items-center justify-center overflow-hidden">
+            <div className="relative w-full h-full flex items-center justify-center">
+              {/* Animated background circles */}
+              <motion.div
+                animate={{ scale: [1, 1.2, 1], rotate: 360 }}
+                transition={{ duration: 6, repeat: Infinity }}
+                className="absolute inset-0 rounded-full bg-linear-to-r from-primary/5 to-accent/5"
+              />
+
+              {/* Grid of interactive icons */}
+              <div className="relative grid grid-cols-3 gap-4 z-10">
+                {[
+                  { Icon: Upload, color: "text-primary", delay: 0 },
+                  { Icon: FolderOpen, color: "text-accent", delay: 0.1 },
+                  { Icon: Lock, color: "text-success", delay: 0.2 },
+                  { Icon: Share2, color: "text-info", delay: 0.3 },
+                  { Icon: FileText, color: "text-purple", delay: 0.4 },
+                  { Icon: Image, color: "text-orange", delay: 0.5 },
+                ].map(({ Icon, color, delay }) => (
+                  <motion.div
+                    key={color}
+                    initial={{ opacity: 0, scale: 0 }}
+                    animate={{ opacity: 1, scale: 1 }}
+                    transition={{ delay, duration: 0.4 }}
+                    whileHover={{ scale: 1.3, rotateZ: 15 }}
+                    whileTap={{ scale: 0.9 }}
+                    className="cursor-pointer"
+                  >
+                    <Icon
+                      size={28}
+                      className={`${color} opacity-60 hover:opacity-100 transition-opacity`}
+                    />
+                  </motion.div>
+                ))}
+              </div>
+            </div>
+          </div>
           <p className="mt-3 text-xs text-muted">
-            Onboarding visual placeholder
+            Interactive workspace preview
           </p>
         </motion.div>
       </div>

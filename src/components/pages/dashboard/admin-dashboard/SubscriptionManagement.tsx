@@ -2,6 +2,7 @@
 
 import { useState } from "react";
 import { motion } from "framer-motion";
+import Swal from "sweetalert2";
 import {
   useGetAllSubscriptionsAdminQuery,
   useCreateSubscriptionMutation,
@@ -128,7 +129,18 @@ const SubscriptionManagement = () => {
   };
 
   const handleDelete = async (id: string, name: string) => {
-    if (!confirm(`Are you sure you want to delete "${name}"?`)) return;
+    const result = await Swal.fire({
+      title: "Delete Subscription?",
+      text: `Are you sure you want to delete "${name}"? This action cannot be undone.`,
+      icon: "warning",
+      showCancelButton: true,
+      confirmButtonColor: "#dc2626",
+      cancelButtonColor: "#6b7280",
+      confirmButtonText: "Yes, delete it!",
+      cancelButtonText: "Cancel",
+    });
+
+    if (!result.isConfirmed) return;
 
     try {
       await deleteSubscription(id).unwrap();

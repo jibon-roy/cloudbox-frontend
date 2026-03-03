@@ -7,57 +7,57 @@ import { Toaster } from "sonner";
 export const metadata: Metadata = {
   // Basic Info
   title: {
-    default: "NextJS Starter Pack | Minimal, production-ready starter",
-    template: "%s | NextJS Starter Pack",
+    default: "CloudBox | Policy-Driven File Storage & Management Platform",
+    template: "%s | CloudBox",
   },
   description:
-    "NextJS Starter Pack — A minimal, production-ready Next.js 16 starter with TypeScript and sensible defaults. Use this as the base for your next app.",
+    "CloudBox — Enterprise-grade file storage platform with policy-driven subscription controls. Manage files like Google Drive, enforce limits like SaaS. Real-time validation, admin dashboards, and multi-tier plans.",
 
   // Canonical & International URLs
   alternates: {
-    canonical: "https://example.com",
+    canonical: "https://cloudbox.app",
     languages: {
-      "en-US": "https://example.com/en",
-      "bn-BD": "https://example.com/bn",
+      "en-US": "https://cloudbox.app/en",
     },
   },
 
   // Application Data
-  applicationName: "NextJS Starter Pack",
+  applicationName: "CloudBox",
   generator: "Next.js 16",
   referrer: "origin-when-cross-origin",
   keywords: [
-    "NextJS",
-    "starter",
-    "typescript",
-    "template",
-    "nextjs",
-    "starter pack",
+    "file storage",
+    "cloud storage",
+    "file management",
+    "subscription tiers",
+    "policy-driven storage",
+    "enterprise file management",
+    "SaaS storage",
+    "policy enforcement",
+    "folder management",
+    "file hosting",
   ],
-  authors: [
-    { name: "Example Team", url: "https://example.com/about" },
-    { name: "Open Source" },
-  ],
-  creator: "Example Team",
-  publisher: "Example Publisher",
-  category: "Developer Tools / Starter",
-  classification: "Software",
+  authors: [{ name: "CloudBox Team", url: "https://cloudbox.app/about" }],
+  creator: "CloudBox",
+  publisher: "CloudBox",
+  category: "File Management / Cloud Storage",
+  classification: "SaaS Application",
 
   // Open Graph (for Facebook, LinkedIn, etc.)
   openGraph: {
-    title: "NextJS Starter Pack | Minimal Next.js Starter",
+    title: "CloudBox | Enterprise File Storage with Policy-Driven Controls",
     description:
-      "A minimal, production-ready Next.js 16 starter with TypeScript and conventions you can rely on.",
-    url: "https://example.com",
-    siteName: "NextJS Starter Pack",
+      "Manage files with Google Drive-like simplicity, enforce business limits like enterprise SaaS. CloudBox brings policy-driven storage to your team.",
+    url: "https://cloudbox.app",
+    siteName: "CloudBox",
     locale: "en_US",
     type: "website",
     images: [
       {
-        url: "/icons/1200x630.png",
+        url: "/icon/512x512.png",
         width: 1200,
         height: 630,
-        alt: "NextJS Starter Pack OG Image",
+        alt: "CloudBox - File Management Platform",
       },
     ],
   },
@@ -65,12 +65,12 @@ export const metadata: Metadata = {
   // Twitter Meta (for social sharing)
   twitter: {
     card: "summary_large_image",
-    title: "NextJS Starter Pack | Minimal, production-ready starter",
+    title: "CloudBox | Policy-Driven File Storage Platform",
     description:
-      "Start your Next.js app with a sensible starter: TypeScript, defaults, and a tidy structure.",
-    creator: "@example",
-    site: "@example",
-    images: ["https://example.com/og-image.jpg"],
+      "Enterprise file management with subscription tiers, real-time policy validation, and admin dashboards. Control your data like never before.",
+    creator: "@cloudbox_app",
+    site: "@cloudbox_app",
+    images: ["/icon/512x512.png"],
   },
 
   // Robots (for search engines)
@@ -107,17 +107,15 @@ export const metadata: Metadata = {
   // Apple Web App Config
   appleWebApp: {
     capable: true,
-    title: "NextJS Starter Pack",
+    title: "CloudBox",
     statusBarStyle: "black-translucent",
   },
 
   // Verification (for Search Console, Pinterest, etc.)
   verification: {
-    google: "EXAMPLE_GOOGLE_VERIFICATION",
-    yandex: "EXAMPLE_YANDEX_VERIFICATION",
-    yahoo: "EXAMPLE_YAHOO_VERIFICATION",
+    google: "CLOUDBOX_GOOGLE_VERIFICATION",
     other: {
-      me: ["https://example.com", "https://twitter.com/example"],
+      me: ["https://cloudbox.app"],
     },
   },
 
@@ -128,16 +126,10 @@ export const metadata: Metadata = {
     address: false,
   },
 
-  // Other Optional Meta (if using iTunes / apps)
-  itunes: {
-    appId: "1234567890",
-    appArgument: "https://example.com",
-  },
-
   // Metadata versioning and experimental fields (optional)
-  metadataBase: new URL("https://example.com"),
-  archives: ["https://example.com/blog"],
-  assets: ["https://example.com/assets"],
+  metadataBase: new URL("https://cloudbox.app"),
+  archives: ["https://cloudbox.app/blog"],
+  assets: ["https://cloudbox.app/assets"],
 };
 
 // Separate viewport export — Next.js recommends moving viewport, themeColor and colorScheme
