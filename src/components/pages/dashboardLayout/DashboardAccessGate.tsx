@@ -51,9 +51,12 @@ export default function DashboardAccessGate({ children }: Props) {
     useGetMySubscriptionQuery(undefined, {
       skip: !accessToken || !isUserRole,
     });
-
+  
   const { data: allSubscriptionsRaw, isLoading: plansLoading } =
-    useGetCurrentSubscriptionQuery({}, { skip: !isLoggedIn || !isUserRole });
+    useGetAllSubscriptionQuery({}, { skip: !isLoggedIn || !isUserRole });
+
+  // const { data: allSubscriptionsRaw, isLoading: plansLoading } =
+  //   useGetCurrentSubscriptionQuery({}, { skip: !isLoggedIn || !isUserRole });
 
   const apiSubscription =
     mySubscriptionRaw && typeof mySubscriptionRaw === "object"
@@ -67,6 +70,7 @@ export default function DashboardAccessGate({ children }: Props) {
       ? ((allSubscriptionsRaw as { data: Array<Record<string, unknown>> })
           .data ?? [])
       : [];
+  
 
     return rawPlans
       .filter((plan) => Boolean(plan?.is_active))
@@ -98,6 +102,8 @@ export default function DashboardAccessGate({ children }: Props) {
         };
       });
   }, [allSubscriptionsRaw]);
+
+  console.log(plans)
 
   const hasPersistedSubscription = isNonEmptyObject(persistedSubscription);
   const hasApiSubscription = isNonEmptyObject(apiSubscription);
@@ -158,8 +164,7 @@ export default function DashboardAccessGate({ children }: Props) {
           Select Subscription
         </h1>
         <p className="mt-3 max-w-2xl text-sm leading-7 text-muted lg:text-base">
-          You don&apos;t have an active subscription yet. Please select one plan
-          from below to continue using dashboard.
+          Please select a subscription plan to access your secure file manager.
         </p>
 
         <div className="mt-16">

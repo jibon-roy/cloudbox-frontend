@@ -105,7 +105,7 @@ const FileItem = ({
 }: Props) => {
   const [showMenu, setShowMenu] = useState(false);
   const fileName = file.originalName || file.name || "Untitled";
-  const fileSize = formatFileSize(Number(file.size || 0));
+  const fileSize = formatFileSize(Number(file.size || file.size_bytes || 0));
   const mimeType =
     file.mimeType || file.mime_type || "application/octet-stream";
   const updatedAt = file.updated_at || file.updatedAt;
@@ -118,96 +118,96 @@ const FileItem = ({
     : "—";
 
   const FileIcon = getFileIcon(mimeType);
-  const downloadUrl = file.url || file.path || "";
+  const fileUrl = file.previewUrl || file.url || "";
+  const previewUrl = file.previewUrl || file.url || "";
 
   if (viewMode === "grid") {
     return (
-      <motion.div
-        whileHover={{ y: -2 }}
-        onClick={(e) => {
-          if (e.ctrlKey || e.metaKey) {
-            onSelect();
-          } else {
-            onViewFile();
-          }
-        }}
-        className={`group relative cursor-pointer rounded-xl border-2 p-4 transition-all ${
-          isSelected
-            ? "border-primary bg-primary/5"
-            : "border-border-subtle bg-surface hover:border-primary/30 hover:bg-surface-soft"
-        }`}
-      >
-        {/* File Preview/Icon */}
-        <div className="mb-3 flex items-center justify-center">
-          {mimeType.startsWith("image/") && file.url ? (
-            <div className="h-16 w-16 overflow-hidden rounded-lg">
-              <img
-                src={file.url}
-                alt={fileName}
-                className="h-full w-full object-cover"
-              />
-            </div>
+      <div className="flex flex-col items-center gap-2">
+        {/* Square Box with Preview/Icon */}
+        <motion.div
+          whileHover={{ y: -2 }}
+          onClick={(e) => {
+            if (e.ctrlKey || e.metaKey) {
+              onSelect();
+            } else {
+              onViewFile();
+            }
+          }}
+          className={`group relative cursor-pointer rounded-xl border-2 w-full aspect-square flex items-center justify-center overflow-hidden transition-all ${
+            isSelected
+              ? "border-primary bg-primary/5"
+              : "border-border-subtle bg-surface hover:border-primary/30 hover:bg-surface-soft"
+          }`}
+        >
+          {/* File Preview/Icon */}
+          {mimeType.startsWith("image/") && previewUrl ? (
+            <img
+              src={previewUrl}
+              alt={fileName}
+              className="h-full w-full object-cover"
+            />
           ) : (
             <FileIcon
-              className={`h-12 w-12 ${
-                isSelected ? "text-primary" : "text-info"
-              }`}
+              className={`h-8 w-8 ${isSelected ? "text-primary" : "text-info"}`}
             />
           )}
-        </div>
 
-        {/* File Name */}
-        <p
-          className="truncate text-center text-sm font-medium text-app-text"
-          title={fileName}
-        >
-          {fileName}
-        </p>
-        <p className="mt-1 text-center text-xs text-muted">{fileSize}</p>
+          {/* Actions Menu */}
+          <div className="absolute right-2 top-2">
+            <button
+              onClick={(e) => {
+                e.stopPropagation();
+                setShowMenu(!showMenu);
+              }}
+              className="rounded-lg bg-surface p-1.5 opacity-0 shadow-sm transition-opacity group-hover:opacity-100 hover:bg-surface-soft cursor-pointer"
+            >
+              <MoreVertical className="h-4 w-4 text-muted" />
+            </button>
 
-        {/* Actions Menu */}
-        <div className="absolute right-2 top-2">
-          <button
-            onClick={(e) => {
-              e.stopPropagation();
-              setShowMenu(!showMenu);
-            }}
-            className="rounded-lg bg-surface p-1.5 opacity-0 shadow-sm transition-opacity group-hover:opacity-100 hover:bg-surface-soft cursor-pointer"
-          >
-            <MoreVertical className="h-4 w-4 text-muted" />
-          </button>
-
-          {showMenu && (
-            <div className="absolute right-0 top-8 z-10 w-40 rounded-lg border border-border-subtle bg-surface shadow-lg">
-              {downloadUrl && (
-                <a
-                  href={downloadUrl}
-                  download={fileName}
+            {showMenu && (
+              <div className="absolute right-0 top-8 z-10 w-40 rounded-lg border border-border-subtle bg-surface shadow-lg">
+                {fileUrl && (
+                  <a
+                    href={fileUrl}
+                    download={fileName}
+                    onClick={(e) => {
+                      e.stopPropagation();
+                      setShowMenu(false);
+                    }}
+                    className="flex w-full items-center gap-2 px-4 py-2 text-left cursor-pointer text-sm text-app-text hover:bg-surface-soft"
+                  >
+                    <Download className="h-4 w-4" />
+                    Download
+                  </a>
+                )}
+                <button
                   onClick={(e) => {
                     e.stopPropagation();
+                    onDelete();
                     setShowMenu(false);
                   }}
-                  className="flex w-full items-center gap-2 px-4 py-2 text-left cursor-pointer text-sm text-app-text hover:bg-surface-soft"
+                  className="flex w-full items-center  cursor-pointer gap-2 px-4 py-2 text-left text-sm text-error hover:bg-red-500/10"
                 >
-                  <Download className="h-4 w-4" />
-                  Download
-                </a>
-              )}
-              <button
-                onClick={(e) => {
-                  e.stopPropagation();
-                  onDelete();
-                  setShowMenu(false);
-                }}
-                className="flex w-full items-center  cursor-pointer gap-2 px-4 py-2 text-left text-sm text-error hover:bg-red-500/10"
-              >
-                <Trash2 className="h-4 w-4" />
-                Delete
-              </button>
-            </div>
-          )}
+                  <Trash2 className="h-4 w-4" />
+                  Delete
+                </button>
+              </div>
+            )}
+          </div>
+        </motion.div>
+
+        {/* File Name and Size - Outside the box */}
+        <div className="w-full text-center">
+          <p
+            className="truncate text-xs font-medium text-app-text"
+            title={fileName}
+          >
+            {fileName}
+          </p>
+          <p className="text-[10px] text-muted">{fileSize}</p>
         </div>
-      </motion.div>
+      </div>
     );
   }
 
@@ -254,9 +254,9 @@ const FileItem = ({
 
       {/* Actions */}
       <div className="col-span-2 flex items-center justify-end gap-2">
-        {downloadUrl && (
+        {fileUrl && (
           <a
-            href={downloadUrl}
+            href={fileUrl}
             download={fileName}
             onClick={(e) => e.stopPropagation()}
             className="rounded-lg p-1.5 text-muted transition-colors hover:bg-info/10 hover:text-info"

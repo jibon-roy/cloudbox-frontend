@@ -4,6 +4,7 @@ import Image from "next/image";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useDispatch } from "react-redux";
+import { RxDashboard } from "react-icons/rx";
 
 interface MenuItem {
   label: string;
@@ -34,9 +35,9 @@ export default function Profile01({
 }: Partial<Profile01Props> = defaultProfile) {
   const menuItems: MenuItem[] = [
     {
-      label: "My Profile",
-      href: "#",
-      icon: <UserRound className="w-4 h-4" />,
+      label: "Dashboard",
+      href: "/dashboard",
+      icon: <RxDashboard className="w-4 h-4" />,
     },
   ];
 

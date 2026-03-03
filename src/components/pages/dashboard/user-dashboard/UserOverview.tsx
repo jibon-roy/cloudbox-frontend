@@ -14,7 +14,17 @@ import {
   selectCurrentToken,
 } from "@/src/redux/features/auth/authSlice";
 import { useState } from "react";
-import { X } from "lucide-react";
+import {
+  X,
+  Folder,
+  File,
+  FileImage,
+  FileVideo,
+  FileAudio,
+  FileText,
+  FileCode,
+  FileArchive,
+} from "lucide-react";
 import { Button } from "@/src/components/ui/button/Button";
 import { useGetMyRecentFileSystemQuery } from "@/src/redux/features/file-system/fileSystemApi";
 
@@ -55,6 +65,22 @@ const numberValue = (value: unknown, fallback = 0) => {
     return Number.isNaN(parsed) ? fallback : parsed;
   }
   return fallback;
+};
+
+const pickFileIcon = (mimeType: string) => {
+  if (mimeType.startsWith("image/")) return FileImage;
+  if (mimeType.startsWith("video/")) return FileVideo;
+  if (mimeType.startsWith("audio/")) return FileAudio;
+  if (mimeType.includes("pdf")) return FileText;
+  if (
+    mimeType.includes("zip") ||
+    mimeType.includes("rar") ||
+    mimeType.includes("7z")
+  )
+    return FileArchive;
+  if (mimeType.startsWith("text/") || mimeType.includes("json"))
+    return FileCode;
+  return File;
 };
 
 const UserOverview = () => {
@@ -124,11 +150,42 @@ const UserOverview = () => {
   const filesCount = numberValue(storage.total_files, files.length);
   const foldersCount = numberValue(storage.total_folders, folders.length);
 
-  const {data: recentFiles } = useGetMyRecentFileSystemQuery(undefined, {
-    skip,
-  });
+  const { data: recentRaw, isLoading: recentLoading } =
+    useGetMyRecentFileSystemQuery(undefined, {
+      skip,
+    });
 
-  console.log(recentFiles)
+  const recentItems = extractArray(recentRaw)
+    .map((item) => {
+      const data =
+        (item.file as Record<string, unknown> | undefined) ||
+        (item.folder as Record<string, unknown> | undefined) ||
+        item;
+
+      const hasFolderShape =
+        data.children !== undefined ||
+        data.files !== undefined ||
+        data.isFolder === true ||
+        String(data.itemType ?? data.type ?? "").toLowerCase() === "folder";
+
+      return {
+        id: String(data.id ?? ""),
+        name: String(data.originalName ?? data.name ?? "Untitled"),
+        mimeType: String(data.mimeType ?? data.mime_type ?? data.type ?? ""),
+        isFolder: hasFolderShape,
+        previewUrl: String(
+          data.previewUrl ?? data.preview_url ?? data.url ?? "",
+        ),
+        updatedAt: String(
+          data.updated_at ??
+            data.updatedAt ??
+            data.created_at ??
+            data.createdAt ??
+            "",
+        ),
+      };
+    })
+    .slice(0, 6);
 
   const usedPercent =
     numberValue(storageSubscription.used_percentage, -1) >= 0
@@ -156,7 +213,11 @@ const UserOverview = () => {
     !subscriptionLoading && !hasApiSubscription && !hasPersistedSubscription;
 
   const isLoading =
-    storageLoading || subscriptionLoading || filesLoading || foldersLoading;
+    storageLoading ||
+    subscriptionLoading ||
+    filesLoading ||
+    foldersLoading ||
+    recentLoading;
 
   const [showWelcome, setShowWelcome] = useState(true);
 
@@ -281,36 +342,54 @@ const UserOverview = () => {
               Recent Files and Folders
             </h2>
             {/* SEE ALL */}
-            <Link
-              href="/my-files"
-  
-            >
+            <Link href="/dashboard/file-manager">
               <Button size="sm">See All</Button>
             </Link>
           </div>
           <div className="mt-4 space-y-3">
-            {files.length === 0 ? (
+            {recentItems.length === 0 ? (
               <p className="text-sm text-muted">
                 {isLoading ? "Loading files..." : "No files found."}
               </p>
             ) : (
-              files.map((item, index) => {
-                const fileName = String(
-                  item.originalName ?? item.name ?? `File ${index + 1}`,
-                );
-                const fileType = String(
-                  item.mimeType ?? item.type ?? "Unknown",
-                );
+              recentItems.map((item, index) => {
+                const FileIcon = pickFileIcon(item.mimeType);
+                const isImageFile =
+                  !item.isFolder &&
+                  item.mimeType.startsWith("image/") &&
+                  !!item.previewUrl;
+                const subtitle = item.isFolder
+                  ? "Folder"
+                  : item.mimeType || "Unknown file";
 
                 return (
                   <div
-                    key={`${fileName}-${index}`}
-                    className="rounded-xl border border-border-subtle bg-surface-soft px-3 py-2"
+                    key={item.id || `${item.name}-${index}`}
+                    className="rounded-xl border border-border-subtle bg-surface-soft px-3 py-2.5"
                   >
-                    <p className="truncate text-sm font-medium text-app-text">
-                      {fileName}
-                    </p>
-                    <p className="text-xs text-muted">{fileType}</p>
+                    <div className="flex items-center gap-3">
+                      <div className="flex h-10 w-10 shrink-0 items-center justify-center overflow-hidden rounded-lg border border-border-subtle bg-surface">
+                        {item.isFolder ? (
+                          <Folder className="h-5 w-5 text-accent" />
+                        ) : isImageFile ? (
+                          <img
+                            src={item.previewUrl}
+                            alt={item.name}
+                            className="h-full w-full object-cover"
+                          />
+                        ) : (
+                          <FileIcon className="h-5 w-5 text-info" />
+                        )}
+                      </div>
+                      <div className="min-w-0 flex-1">
+                        <p className="truncate text-sm font-medium text-app-text">
+                          {item.name}
+                        </p>
+                        <p className="truncate text-xs text-muted">
+                          {subtitle}
+                        </p>
+                      </div>
+                    </div>
                   </div>
                 );
               })

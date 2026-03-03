@@ -24,10 +24,23 @@ const findFolderInTree = (
   folderId: string,
 ): { folders: any[]; files: any[] } | null => {
   if (!folderId || folderId === "") {
-    // Root level - return all top-level folders and files with no parent
+    // Root level - return all items sorted with folders first, then files
+    const folders: any[] = [];
+    const files: any[] = [];
+
+    tree.forEach((item) => {
+      if (item.children !== undefined || item.files !== undefined) {
+        // It's a folder (has children or files property)
+        folders.push(item);
+      } else {
+        // It's a file
+        files.push(item);
+      }
+    });
+
     return {
-      folders: tree || [],
-      files: [], // Root files would need to be fetched separately if they exist at root
+      folders: folders,
+      files: files,
     };
   }
 
@@ -79,11 +92,16 @@ const FileManagerPage = () => {
   });
 
   // Extract tree array from response
-  const tree = Array.isArray(treeData)
+  const rawTree = Array.isArray(treeData)
     ? treeData
     : treeData?.data && Array.isArray(treeData.data)
       ? treeData.data
       : [];
+
+  // Unwrap files from the 'file' property wrapper
+  const tree = rawTree.map((item: { file?: any }) => {
+    return item.file || item;
+  });
 
   // Get current folder contents
   const currentFolderData = findFolderInTree(tree, currentFolderId);

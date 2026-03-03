@@ -2,17 +2,14 @@
 "use client";
 
 import {
-  BarChart2,
-  Building2,
   CreditCard,
   Folder,
-  Home,
   LogOut,
   Menu,
   Package,
   Settings,
-  User,
 } from "lucide-react";
+import { RxDashboard } from "react-icons/rx";
 import Link from "next/link";
 import { useState } from "react";
 import { logoutHandler } from "@/src/utils/handleLogout";
@@ -88,7 +85,7 @@ export default function Sidebar() {
 
           <div className="flex-1 p-4">
             <div className="space-y-1">
-              <NavItem href="/dashboard" icon={Home} onClick={closeMobile}>
+              <NavItem href="/dashboard" icon={RxDashboard} onClick={closeMobile}>
                 Dashboard
               </NavItem>
               {/* file manager */}

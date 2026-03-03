@@ -8,6 +8,13 @@ import { useState } from "react";
 import MarketingButton from "./MarketingButton";
 import dynamic from "next/dynamic";
 import Logo from "../../ui-library/logo";
+import { useAppSelector } from "@/src/redux/hooks";
+import {
+  selectCurrentUser,
+  selectCurrentToken,
+} from "@/src/redux/features/auth/authSlice";
+import Profile01 from "../dashboardLayout/profile-01";
+import UserDropdown from "../../shared/NavBar/UserDropdown";
 
 const ThemeSwitch = dynamic(() => import("../../ui/theme/ThemeSwitch"), {
   ssr: false,
@@ -23,6 +30,13 @@ const navItems = [
 const MarketingNavbar = () => {
   const pathname = usePathname();
   const [open, setOpen] = useState(false);
+  const user = useAppSelector(selectCurrentUser);
+  const token = useAppSelector(selectCurrentToken);
+  const isLoggedIn = Boolean(user && token);
+
+  const userName = user?.full_name || user?.email || "User";
+  const userRole = user?.role || "User";
+  const userAvatar = user?.profile_image_url || "/user.png";
 
   return (
     <header className="sticky top-0 z-50 border-b border-border-subtle bg-surface/90 backdrop-blur-lg">
@@ -51,12 +65,18 @@ const MarketingNavbar = () => {
 
         <div className="hidden items-center gap-3 md:flex">
           <ThemeSwitch variant="toggle" />
-          <Link href="/auth/login">
-            <MarketingButton variant="ghost">Log in</MarketingButton>
-          </Link>
-          <Link href="/auth/register">
-            <MarketingButton>Get Started</MarketingButton>
-          </Link>
+          {isLoggedIn ? (
+            <UserDropdown />
+          ) : (
+            <>
+              <Link href="/auth/login">
+                <MarketingButton variant="ghost">Log in</MarketingButton>
+              </Link>
+              <Link href="/auth/register">
+                <MarketingButton>Get Started</MarketingButton>
+              </Link>
+            </>
+          )}
         </div>
 
         <button
@@ -91,16 +111,41 @@ const MarketingNavbar = () => {
               <div className="flex items-center justify-center py-2">
                 <ThemeSwitch variant="toggle" />
               </div>
-              <div className="grid grid-cols-2 gap-2 pt-2">
-                <Link href="/auth/login" onClick={() => setOpen(false)}>
-                  <MarketingButton variant="outline" className="w-full">
-                    Log in
-                  </MarketingButton>
-                </Link>
-                <Link href="/auth/register" onClick={() => setOpen(false)}>
-                  <MarketingButton className="w-full">Sign up</MarketingButton>
-                </Link>
-              </div>
+              {isLoggedIn ? (
+                <div className="border-t border-border-subtle pt-2 mt-2">
+                  <div className="flex items-center gap-3 px-3 py-2 rounded-lg bg-surface-soft mb-2">
+                    <img
+                      src={userAvatar}
+                      alt={userName}
+                      className="w-8 h-8 rounded-full object-cover"
+                    />
+                    <div>
+                      <p className="text-sm font-medium text-app-text">
+                        {userName}
+                      </p>
+                      <p className="text-xs text-muted">{userRole}</p>
+                    </div>
+                  </div>
+                  <Profile01
+                    name={userName}
+                    role={userRole}
+                    avatar={userAvatar}
+                  />
+                </div>
+              ) : (
+                <div className="grid grid-cols-2 gap-2 pt-2">
+                  <Link href="/auth/login" onClick={() => setOpen(false)}>
+                    <MarketingButton variant="outline" className="w-full">
+                      Log in
+                    </MarketingButton>
+                  </Link>
+                  <Link href="/auth/register" onClick={() => setOpen(false)}>
+                    <MarketingButton className="w-full">
+                      Sign up
+                    </MarketingButton>
+                  </Link>
+                </div>
+              )}
             </div>
           </motion.div>
         ) : null}

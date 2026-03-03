@@ -78,7 +78,7 @@ export const DropdownMenu = ({ children }: DropdownMenuProps) => {
           align="end"
           onClose={() => setIsOpen(false)} // ✅ Better than onBlur
           sideOffset={8}
-          className="w-[280px] sm:w-80"
+          className="w-70 sm:w-80"
         >
           <Profile01 />
         </DropdownMenuContent>

@@ -26,7 +26,7 @@ const AudioPlayerModal = ({ file, onClose }: Props) => {
   const [duration, setDuration] = useState(0);
 
   const fileName = file.name || "Audio";
-  const downloadUrl = file.downloadUrl || file.url || "";
+  const previewUrl = file.previewUrl || file.url || "";
 
   const togglePlay = () => {
     if (audioRef.current) {
@@ -123,7 +123,7 @@ const AudioPlayerModal = ({ file, onClose }: Props) => {
           {/* Audio element */}
           <audio
             ref={audioRef}
-            src={downloadUrl}
+            src={previewUrl}
             onTimeUpdate={handleTimeUpdate}
             onLoadedMetadata={handleLoadedMetadata}
             onEnded={() => setIsPlaying(false)}

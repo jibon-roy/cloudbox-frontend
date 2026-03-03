@@ -34,75 +34,76 @@ const FolderItem = ({
 
   if (viewMode === "grid") {
     return (
-      <motion.div
-        whileHover={{ y: -2 }}
-        onClick={(e) => {
-          if (e.ctrlKey || e.metaKey) {
-            onSelect();
-          } else {
-            onNavigate();
-          }
-        }}
-        className={`group relative cursor-pointer rounded-xl border-2 p-4 transition-all ${
-          isSelected
-            ? "border-primary bg-primary/5"
-            : "border-border-subtle bg-surface hover:border-primary/30 hover:bg-surface-soft"
-        }`}
-      >
-        {/* Folder Icon */}
-        <div className="mb-3 flex items-center justify-center">
+      <div className="flex flex-col items-center gap-2">
+        {/* Square Box with Icon */}
+        <motion.div
+          whileHover={{ y: -2 }}
+          onClick={(e) => {
+            if (e.ctrlKey || e.metaKey) {
+              onSelect();
+            } else {
+              onNavigate();
+            }
+          }}
+          className={`group relative cursor-pointer rounded-xl border-2 w-full aspect-square flex items-center justify-center transition-all ${
+            isSelected
+              ? "border-primary bg-primary/5"
+              : "border-border-subtle bg-surface hover:border-primary/30 hover:bg-surface-soft"
+          }`}
+        >
+          {/* Folder Icon */}
           <Folder
             className={`h-12 w-12 ${
               isSelected ? "text-primary" : "text-accent"
             }`}
           />
-        </div>
 
-        {/* Folder Name */}
-        <p className="truncate text-center text-sm font-medium text-app-text">
+          {/* Actions Menu */}
+          <div className="absolute right-2 top-2">
+            <button
+              onClick={(e) => {
+                e.stopPropagation();
+                setShowMenu(!showMenu);
+              }}
+              className="rounded-lg bg-surface p-1.5 opacity-0 shadow-sm transition-opacity group-hover:opacity-100 hover:bg-surface-soft"
+            >
+              <MoreVertical className="h-4 w-4 text-muted" />
+            </button>
+
+            {showMenu && (
+              <div className="absolute right-0 top-8 z-10 w-40 rounded-lg border border-border-subtle bg-surface shadow-lg">
+                <button
+                  onClick={(e) => {
+                    e.stopPropagation();
+                    onSelect();
+                    setShowMenu(false);
+                  }}
+                  className="w-full px-4 py-2 text-left text-sm cursor-pointer text-app-text hover:bg-surface-soft"
+                >
+                  <BoxSelect className="mr-2 inline h-4 w-4" />
+                  Select
+                </button>
+                <button
+                  onClick={(e) => {
+                    e.stopPropagation();
+                    onDelete();
+                    setShowMenu(false);
+                  }}
+                  className="flex w-full items-center gap-2 px-4 py-2 text-left text-sm text-error hover:bg-red-500/10 cursor-pointer"
+                >
+                  <Trash2 className="h-4 w-4" />
+                  Delete
+                </button>
+              </div>
+            )}
+          </div>
+        </motion.div>
+
+        {/* Folder Name - Outside the box */}
+        <p className="truncate text-center text-xs font-medium text-app-text w-full">
           {folderName}
         </p>
-
-        {/* Actions Menu */}
-        <div className="absolute right-2 top-2">
-          <button
-            onClick={(e) => {
-              e.stopPropagation();
-              setShowMenu(!showMenu);
-            }}
-            className="rounded-lg bg-surface p-1.5 opacity-0 shadow-sm transition-opacity group-hover:opacity-100 hover:bg-surface-soft"
-          >
-            <MoreVertical className="h-4 w-4 text-muted" />
-          </button>
-
-          {showMenu && (
-            <div className="absolute right-0 top-8 z-10 w-40 rounded-lg border border-border-subtle bg-surface shadow-lg">
-              <button
-                onClick={(e) => {
-                  e.stopPropagation();
-                  onSelect();
-                  setShowMenu(false);
-                }}
-                className="w-full px-4 py-2 text-left text-sm cursor-pointer text-app-text hover:bg-surface-soft"
-              >
-                <BoxSelect className="mr-2 inline h-4 w-4" />
-                Select
-              </button>
-              <button
-                onClick={(e) => {
-                  e.stopPropagation();
-                  onDelete();
-                  setShowMenu(false);
-                }}
-                className="flex w-full items-center gap-2 px-4 py-2 text-left text-sm text-error hover:bg-red-500/10 cursor-pointer"
-              >
-                <Trash2 className="h-4 w-4" />
-                Delete
-              </button>
-            </div>
-          )}
-        </div>
-      </motion.div>
+      </div>
     );
   }
 

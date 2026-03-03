@@ -12,7 +12,7 @@ type Props = {
 const ImageViewerModal = ({ file, onClose }: Props) => {
   const [isLoading, setIsLoading] = useState(true);
   const fileName = file.name || "Image";
-  const downloadUrl = file.downloadUrl || file.url || "";
+  const imageUrl = file.previewUrl || file.url || "";
 
   return (
     <motion.div
@@ -50,7 +50,7 @@ const ImageViewerModal = ({ file, onClose }: Props) => {
             </div>
           )}
           <img
-            src={downloadUrl}
+            src={imageUrl}
             alt={fileName}
             style={{
               maxHeight: "calc(90vh - 100px)",

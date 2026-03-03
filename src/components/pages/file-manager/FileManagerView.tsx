@@ -111,63 +111,44 @@ const FileManagerView = ({
 
   if (viewMode === "grid") {
     return (
-      <div className="space-y-6">
-        {/* Folders Section */}
-        {sortedFolders.length > 0 && (
-          <div>
-            <h3 className="mb-3 text-sm font-semibold text-muted">Folders</h3>
-            <div className="grid grid-cols-2 gap-3 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 xl:grid-cols-6">
-              {sortedFolders.map((folder: any) => (
-                <FolderItem
-                  key={folder.id}
-                  folder={folder}
-                  viewMode="grid"
-                  isSelected={selectedItems.includes(folder.id)}
-                  onSelect={() => onSelectItem(folder.id)}
-                  onNavigate={() =>
-                    onNavigateToFolder(
-                      folder.id,
-                      folder.name || "Untitled Folder",
-                    )
-                  }
-                  onDelete={() =>
-                    onDeleteClick(
-                      folder.id,
-                      "folder",
-                      folder.name || "Untitled Folder",
-                    )
-                  }
-                />
-              ))}
-            </div>
-          </div>
-        )}
-
-        {/* Files Section */}
-        {sortedFiles.length > 0 && (
-          <div>
-            <h3 className="mb-3 text-sm font-semibold text-muted">Files</h3>
-            <div className="grid grid-cols-2 gap-3 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 xl:grid-cols-6">
-              {sortedFiles.map((file: any) => (
-                <FileItem
-                  key={file.id}
-                  file={file}
-                  viewMode="grid"
-                  isSelected={selectedItems.includes(file.id)}
-                  onSelect={() => onSelectItem(file.id)}
-                  onViewFile={() => onViewFile(file)}
-                  onDelete={() =>
-                    onDeleteClick(
-                      file.id,
-                      "file",
-                      file.originalName || file.name || "Untitled",
-                    )
-                  }
-                />
-              ))}
-            </div>
-          </div>
-        )}
+      <div className="grid grid-cols-4 gap-2 sm:grid-cols-5 md:grid-cols-6 lg:grid-cols-7 xl:grid-cols-8">
+        {/* Folders first, then files - all mixed together */}
+        {sortedFolders.map((folder: any) => (
+          <FolderItem
+            key={folder.id}
+            folder={folder}
+            viewMode="grid"
+            isSelected={selectedItems.includes(folder.id)}
+            onSelect={() => onSelectItem(folder.id)}
+            onNavigate={() =>
+              onNavigateToFolder(folder.id, folder.name || "Untitled Folder")
+            }
+            onDelete={() =>
+              onDeleteClick(
+                folder.id,
+                "folder",
+                folder.name || "Untitled Folder",
+              )
+            }
+          />
+        ))}
+        {sortedFiles.map((file: any) => (
+          <FileItem
+            key={file.id}
+            file={file}
+            viewMode="grid"
+            isSelected={selectedItems.includes(file.id)}
+            onSelect={() => onSelectItem(file.id)}
+            onViewFile={() => onViewFile(file)}
+            onDelete={() =>
+              onDeleteClick(
+                file.id,
+                "file",
+                file.originalName || file.name || "Untitled",
+              )
+            }
+          />
+        ))}
       </div>
     );
   }
@@ -183,7 +164,7 @@ const FileManagerView = ({
         <div className="col-span-2 text-right">Actions</div>
       </div>
 
-      {/* Folders */}
+      {/* Folders first, then files - all mixed together */}
       {sortedFolders.map((folder: any) => (
         <FolderItem
           key={folder.id}
@@ -200,7 +181,6 @@ const FileManagerView = ({
         />
       ))}
 
-      {/* Files */}
       {sortedFiles.map((file: any) => (
         <FileItem
           key={file.id}

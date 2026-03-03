@@ -11,11 +11,11 @@ type Props = {
 const UnsupportedFileModal = ({ file, onClose }: Props) => {
   const fileName = file.name || "File";
   const mimeType = file.mime_type || "Unknown";
-  const downloadUrl = file.downloadUrl || file.url || "";
+  const previewUrl = file.previewUrl || file.url || "";
 
   const handleDownload = () => {
     const link = document.createElement("a");
-    link.href = downloadUrl;
+    link.href = previewUrl;
     link.download = fileName;
     document.body.appendChild(link);
     link.click();

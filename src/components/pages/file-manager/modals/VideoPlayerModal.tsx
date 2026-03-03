@@ -17,7 +17,7 @@ const VideoPlayerModal = ({ file, onClose }: Props) => {
   const [duration, setDuration] = useState(0);
 
   const fileName = file.name || "Video";
-  const downloadUrl = file.downloadUrl || file.url || "";
+  const previewUrl = file.previewUrl || file.url || "";
 
   const togglePlay = () => {
     if (videoRef.current) {
@@ -96,7 +96,7 @@ const VideoPlayerModal = ({ file, onClose }: Props) => {
         <div className="relative flex items-center justify-center bg-black">
           <video
             ref={videoRef}
-            src={downloadUrl}
+            src={previewUrl}
             onTimeUpdate={handleTimeUpdate}
             onLoadedMetadata={handleLoadedMetadata}
             onEnded={() => setIsPlaying(false)}

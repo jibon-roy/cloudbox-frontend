@@ -12,11 +12,11 @@ type Props = {
 const PdfViewerModal = ({ file, onClose }: Props) => {
   const [isLoading, setIsLoading] = useState(true);
   const fileName = file.name || "PDF";
-  const downloadUrl = file.downloadUrl || file.url || "";
+  const previewUrl = file.previewUrl || file.url || "";
 
   const handleDownload = () => {
     const link = document.createElement("a");
-    link.href = downloadUrl;
+    link.href = previewUrl;
     link.download = fileName;
     document.body.appendChild(link);
     link.click();
@@ -68,7 +68,7 @@ const PdfViewerModal = ({ file, onClose }: Props) => {
             </div>
           ) : null}
           <iframe
-            src={`${downloadUrl}#toolbar=1`}
+            src={`${previewUrl}#toolbar=1`}
             style={{ height: "calc(90vh - 80px)", width: "100%" }}
             onLoad={() => setIsLoading(false)}
             className="rounded-b-lg"

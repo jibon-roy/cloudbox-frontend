@@ -1,4 +1,5 @@
 import Link from "next/link";
+import Logo from "../../ui-library/logo";
 
 const MarketingFooter = () => {
   return (
@@ -6,8 +7,7 @@ const MarketingFooter = () => {
       <div className="mx-auto grid w-full max-w-7xl gap-10 px-5 py-14 lg:grid-cols-4 lg:px-10">
         <div className="space-y-3">
           <div className="flex items-center gap-2">
-            <div className="h-8 w-8 rounded-lg brand-gradient" />
-            <p className="text-base font-bold text-app-text">CloudBox</p>
+            <Logo />
           </div>
           <p className="text-sm leading-6 text-muted">
             Subscription-based file management platform for teams and
