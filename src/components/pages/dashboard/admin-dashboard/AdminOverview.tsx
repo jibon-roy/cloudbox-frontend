@@ -133,7 +133,7 @@ const AdminOverview = () => {
 
       <UserTrafficChart />
 
-      <div className="grid grid-cols-1 gap-4 xl:grid-cols-3">
+      {/* <div className="grid grid-cols-1 gap-4 xl:grid-cols-3">
         <div className={`${cardClasses} xl:col-span-1`}>
           <h2 className="text-lg font-semibold text-app-text">Recent Users</h2>
           <div className="mt-4 space-y-3">
@@ -219,7 +219,7 @@ const AdminOverview = () => {
             </tbody>
           </table>
         </div>
-      </div>
+      </div> */}
     </div>
   );
 };
