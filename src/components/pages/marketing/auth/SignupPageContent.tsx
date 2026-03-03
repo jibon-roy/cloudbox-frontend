@@ -90,7 +90,7 @@ const SignupPageContent = () => {
         icon: "error",
         title: "Registration Failed",
         text: err?.data?.message || "This email might already be registered",
-       confirmButtonColor: colors.primary
+        confirmButtonColor: colors.primary,
       });
     }
   };
@@ -125,7 +125,7 @@ const SignupPageContent = () => {
         icon: "error",
         title: "Verification Failed",
         text: err?.data?.message || "Invalid or expired OTP",
-         confirmButtonColor: colors.primary
+        confirmButtonColor: colors.primary,
       });
     }
   };

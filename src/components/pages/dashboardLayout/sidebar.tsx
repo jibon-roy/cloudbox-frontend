@@ -14,8 +14,9 @@ import Link from "next/link";
 import { useState } from "react";
 import { logoutHandler } from "@/src/utils/handleLogout";
 import { useRouter, usePathname } from "next/navigation";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import Logo from "../../ui-library/logo";
+import { RootState } from "@/src/redux/store";
 
 function NavItem({
   href = "#",
@@ -60,6 +61,8 @@ export default function Sidebar() {
 
   const closeMobile = () => setIsMobileMenuOpen(false);
 
+  const user = useSelector((state: RootState) => state.auth.user);
+
   return (
     <>
       <button
@@ -84,40 +87,64 @@ export default function Sidebar() {
           </div>
 
           <div className="flex-1 p-4">
-            <div className="space-y-1">
-              <NavItem href="/dashboard" icon={RxDashboard} onClick={closeMobile}>
-                Dashboard
-              </NavItem>
-              {/* file manager */}
-              <NavItem
-                href="/dashboard/file-manager"
-                icon={Folder}
-                onClick={closeMobile}
-              >
-                File Manager
-              </NavItem>
-              <NavItem
-                href="/dashboard/my-subscription"
-                icon={Package}
-                onClick={closeMobile}
-              >
-                My Subscription
-              </NavItem>
-              <NavItem
-                href="/dashboard/billing-history"
-                icon={CreditCard}
-                onClick={closeMobile}
-              >
-                Billing History
-              </NavItem>
-              <NavItem
-                href="/dashboard/user-settings"
-                icon={Settings}
-                onClick={closeMobile}
-              >
-                Settings
-              </NavItem>
-            </div>
+            {user?.role === "USER" && (
+              <div className="space-y-1">
+                <NavItem
+                  href="/dashboard"
+                  icon={RxDashboard}
+                  onClick={closeMobile}
+                >
+                  Dashboard
+                </NavItem>
+                {/* file manager */}
+                <NavItem
+                  href="/dashboard/file-manager"
+                  icon={Folder}
+                  onClick={closeMobile}
+                >
+                  File Manager
+                </NavItem>
+                <NavItem
+                  href="/dashboard/my-subscription"
+                  icon={Package}
+                  onClick={closeMobile}
+                >
+                  My Subscription
+                </NavItem>
+                <NavItem
+                  href="/dashboard/billing-history"
+                  icon={CreditCard}
+                  onClick={closeMobile}
+                >
+                  Billing History
+                </NavItem>
+                <NavItem
+                  href="/dashboard/user-settings"
+                  icon={Settings}
+                  onClick={closeMobile}
+                >
+                  Settings
+                </NavItem>
+              </div>
+            )}
+            {user?.role === "ADMIN" && (
+              <div className="space-y-1">
+                <NavItem
+                  href="/dashboard"
+                  icon={RxDashboard}
+                  onClick={closeMobile}
+                >
+                  Dashboard
+                </NavItem>
+                <NavItem
+                  href="/dashboard/user-settings"
+                  icon={Settings}
+                  onClick={closeMobile}
+                >
+                  Settings
+                </NavItem>
+              </div>
+            )}
           </div>
 
           <div className="border-t border-border-subtle p-4">
