@@ -16,7 +16,8 @@ import UnsupportedFileModal from "./modals/UnsupportedFileModal";
 import { useGetFileSystemTreeQuery } from "@/src/redux/features/file-system/fileSystemApi";
 
 export type ViewMode = "grid" | "list";
-export type SortOption = "name" | "updated" | "size" | "type";
+export type SortOption = "name" | "modified" | "size" | "created";
+export type FilterType = "file" | "folder" | "all";
 
 // Helper to find current folder and its contents in the tree
 const findFolderInTree = (
@@ -64,8 +65,9 @@ const findFolderInTree = (
 const FileManagerPage = () => {
   const [currentFolderId, setCurrentFolderId] = useState<string>("");
   const [viewMode, setViewMode] = useState<ViewMode>("grid");
-  const [sortBy, setSortBy] = useState<SortOption>("name");
-  const [sortOrder, setSortOrder] = useState<"asc" | "desc">("asc");
+  const [sortBy, setSortBy] = useState<SortOption>("modified");
+  const [sortOrder, setSortOrder] = useState<"asc" | "desc">("desc");
+  const [filterType, setFilterType] = useState<FilterType>("all");
   const [searchQuery, setSearchQuery] = useState("");
   const [selectedItems, setSelectedItems] = useState<string[]>([]);
 
@@ -86,9 +88,12 @@ const FileManagerPage = () => {
 
   // Fetch file system tree
   const { data: treeData, isLoading } = useGetFileSystemTreeQuery({
+    sortBy,
+    sortOrder,
+    filterType,
     search: searchQuery,
     page: 1,
-    limit: 100,
+    limit: 50,
   });
 
   // Extract tree array from response
@@ -153,6 +158,8 @@ const FileManagerPage = () => {
         onSortByChange={setSortBy}
         sortOrder={sortOrder}
         onSortOrderChange={setSortOrder}
+        filterType={filterType}
+        onFilterTypeChange={setFilterType}
         searchQuery={searchQuery}
         onSearchChange={setSearchQuery}
       />

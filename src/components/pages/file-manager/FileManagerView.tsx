@@ -44,22 +44,17 @@ const FileManagerView = ({
           compareA = String(a.name || a.originalName || "").toLowerCase();
           compareB = String(b.name || b.originalName || "").toLowerCase();
           break;
-        case "updated":
+        case "modified":
           compareA = new Date(a.updated_at || a.updatedAt || 0).getTime();
           compareB = new Date(b.updated_at || b.updatedAt || 0).getTime();
+          break;
+        case "created":
+          compareA = new Date(a.created_at || a.createdAt || 0).getTime();
+          compareB = new Date(b.created_at || b.createdAt || 0).getTime();
           break;
         case "size":
           compareA = Number(a.size || 0);
           compareB = Number(b.size || 0);
-          break;
-        case "type":
-          if (type === "file") {
-            compareA = String(a.mimeType || a.mime_type || "").toLowerCase();
-            compareB = String(b.mimeType || b.mime_type || "").toLowerCase();
-          } else {
-            compareA = "folder";
-            compareB = "folder";
-          }
           break;
         default:
           return 0;

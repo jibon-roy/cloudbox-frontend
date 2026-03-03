@@ -1,7 +1,7 @@
 "use client";
 
 import { Grid3X3, List, Search, SortAsc, SortDesc } from "lucide-react";
-import { ViewMode, SortOption } from "./FileManagerPage";
+import { ViewMode, SortOption, FilterType } from "./FileManagerPage";
 
 type Props = {
   viewMode: ViewMode;
@@ -10,6 +10,8 @@ type Props = {
   onSortByChange: (sort: SortOption) => void;
   sortOrder: "asc" | "desc";
   onSortOrderChange: (order: "asc" | "desc") => void;
+  filterType: FilterType;
+  onFilterTypeChange: (type: FilterType) => void;
   searchQuery: string;
   onSearchChange: (query: string) => void;
 };
@@ -21,6 +23,8 @@ const FileManagerToolbar = ({
   onSortByChange,
   sortOrder,
   onSortOrderChange,
+  filterType,
+  onFilterTypeChange,
   searchQuery,
   onSearchChange,
 }: Props) => {
@@ -47,9 +51,19 @@ const FileManagerToolbar = ({
           className="rounded-lg border border-border-subtle bg-surface px-3 py-2 text-sm text-app-text focus:border-primary focus:outline-none focus:ring-2 focus:ring-primary/20"
         >
           <option value="name">Name</option>
-          <option value="updated">Modified</option>
+          <option value="modified">Modified</option>
+          <option value="created">Created</option>
           <option value="size">Size</option>
-          <option value="type">Type</option>
+        </select>
+
+        <select
+          value={filterType}
+          onChange={(e) => onFilterTypeChange(e.target.value as FilterType)}
+          className="rounded-lg border border-border-subtle bg-surface px-3 py-2 text-sm text-app-text focus:border-primary focus:outline-none focus:ring-2 focus:ring-primary/20"
+        >
+          <option value="all">All</option>
+          <option value="file">Files</option>
+          <option value="folder">Folders</option>
         </select>
 
         {/* Sort Order Toggle */}
