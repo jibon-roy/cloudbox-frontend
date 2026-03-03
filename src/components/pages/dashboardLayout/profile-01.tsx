@@ -1,6 +1,5 @@
 import { logoutHandler } from "@/src/utils/handleLogout";
-import { LogOut, MoveUpRight, UserRound } from "lucide-react";
-import Image from "next/image";
+import { LogOut, MoveUpRight } from "lucide-react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useDispatch, useSelector } from "react-redux";
@@ -51,6 +50,7 @@ export default function Profile01() {
             <div className="relative shrink-0">
               <img
                 src={userAvatar}
+                onError={(e) => (e.currentTarget.src = "/user.png")}
                 alt={userName}
                 width={72}
                 height={72}

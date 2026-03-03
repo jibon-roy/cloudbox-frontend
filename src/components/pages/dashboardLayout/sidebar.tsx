@@ -137,6 +137,13 @@ export default function Sidebar() {
                   Dashboard
                 </NavItem>
                 <NavItem
+                  href="/dashboard/manage-subscriptions"
+                  icon={Package}
+                  onClick={closeMobile}
+                >
+                  Manage Subscriptions
+                </NavItem>
+                <NavItem
                   href="/dashboard/user-settings"
                   icon={Settings}
                   onClick={closeMobile}

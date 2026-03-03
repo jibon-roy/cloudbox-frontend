@@ -25,6 +25,7 @@ const UserDropdown = ({ className }: { className?: string }) => {
             <img
               src={userAvatar}
               alt={`${userName}'s avatar`}
+              onError={(e) => (e.currentTarget.src = "/user.png")}
               width={28}
               height={28}
               className="rounded-full ring-2 ring-gray-200 dark:ring-[#2B2B30] w-9 h-9 cursor-pointer"

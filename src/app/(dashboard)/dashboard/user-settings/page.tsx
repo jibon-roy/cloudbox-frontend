@@ -288,6 +288,7 @@ const UserSettingsPage = () => {
                 {profilePreview ? (
                   <img
                     src={profilePreview}
+                    onError={e=>e.currentTarget.src ="/user.png"}
                     alt="Profile preview"
                     className="h-full w-full object-cover"
                   />

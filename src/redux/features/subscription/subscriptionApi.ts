@@ -49,6 +49,36 @@ const subscriptionApi = baseApi.injectEndpoints({
       }),
       invalidatesTags: ["subscription", "user"],
     }),
+    getAllSubscriptionsAdmin: builder.query({
+      query: () => ({
+        url: `subscription/all`,
+        method: "GET",
+      }),
+      providesTags: ["subscription"],
+    }),
+    createSubscription: builder.mutation({
+      query: (data) => ({
+        url: `subscription`,
+        method: "POST",
+        body: data,
+      }),
+      invalidatesTags: ["subscription"],
+    }),
+    updateSubscription: builder.mutation({
+      query: ({ id, data }) => ({
+        url: `subscription/${id}`,
+        method: "PATCH",
+        body: data,
+      }),
+      invalidatesTags: ["subscription"],
+    }),
+    deleteSubscription: builder.mutation({
+      query: (id) => ({
+        url: `subscription/${id}`,
+        method: "DELETE",
+      }),
+      invalidatesTags: ["subscription"],
+    }),
   }),
 });
 
@@ -58,4 +88,8 @@ export const {
   useBuySubscriptionMutation,
   useGetCurrentSubscriptionQuery,
   useConfirmPaymentMutation,
+  useGetAllSubscriptionsAdminQuery,
+  useCreateSubscriptionMutation,
+  useUpdateSubscriptionMutation,
+  useDeleteSubscriptionMutation,
 } = subscriptionApi;
